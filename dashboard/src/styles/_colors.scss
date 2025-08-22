@@ -1,0 +1,27 @@
+:root {
+    --primary-color:#215ABD;
+    --secondary-color:#D9E2FF;
+    --dark-text-color:#000000;
+    --normal-text-color:#344054;
+    --light-text-color:#667085;
+    --borders-color:#D0D5DD;
+    --bg-color:#fff;
+    --side-bar-color:#fff;
+}
+// --body-color:#18191A;
+//     --slidebar-color:#242526;
+//     --toggle-color:#fff;
+//     --text-color:#ccc;
+//     --footer-color:#72747b;
+
+
+.App.dark {
+    --primary-color:#327dff;
+    --secondary-color:#D9E2FF;
+    --dark-text-color:#464646;
+    --normal-text-color:#ccc;
+    --light-text-color:#ccc;
+    --borders-color:#72747b;
+    --bg-color:#18191A;
+    --side-bar-color:#242526;
+}

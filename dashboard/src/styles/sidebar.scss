@@ -1,0 +1,402 @@
+@import './colors';
+.sidebar {
+    z-index: 200;
+    position: fixed;
+    height: 100vh;
+    box-shadow: -10px 0px 10px #00000020;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+    background-color: var(--side-bar-color);
+    .logo {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        flex-direction: column;
+        img {
+            width: 120px;
+        }
+    }
+    .ul {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        height: calc(100vh - 280px);
+        overflow-y: scroll;
+        scrollbar-width: none; 
+        -ms-overflow-style: none;
+        &::-webkit-scrollbar {
+            display: none;
+        }
+        .li {
+            display: flex;
+            align-items:center;
+            justify-content: flex-start;
+            gap: 20px;
+            padding: 0 5px;
+            border-radius: 6px;
+            border: 2px solid transparent;
+            cursor: pointer;
+            &:hover {
+                border: 2px solid var(--borders-color);
+            }
+            &.active {
+                border: 2px solid var(--borders-color);
+            }
+            .icon {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+        }
+        .search {
+            border: 1px solid var(--borders-color);
+        }
+    }
+    .theme {
+        position: absolute;
+        bottom: 80px;
+        width: 260px;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        p {
+            color: var(--normal-text-color);
+        }
+        button {
+            position: relative;
+            width: 70px;
+            height: 24px;
+            background-color: var(--side-bar-color);
+            outline: 2px solid var(--light-text-color);
+            border-radius: 15px;
+            span {
+                position: absolute;
+                width: 22px;
+                height: 22px;
+                border-radius: 50%;
+                background-color: var(--light-text-color);
+                top: 1px;
+                right: 1px;
+            }
+            &.switchLeft {
+                span {
+                    right: 47px;
+                }
+            }
+        }
+    }
+    .account {
+        position: absolute;
+        bottom: 0;
+        border-top: 2px solid var(--borders-color);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        .logout {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+    }
+}
+@media only screen and (min-width: 992px){
+    .sidebar {
+        width: 300px;
+        padding: 150px 20px;
+        .slideBtn {
+            display: none;
+        }
+        .logo {
+            top: 20px;
+        }
+        .ul {
+            gap:20px;
+            .li {
+                height: 50px;
+                width: 260px;
+            }
+            .search {
+                .input {
+                    width: 215px;
+                }
+            }
+        }
+        .account {
+            height: 80px;
+            width: 260px;
+        }
+        .blurOverLay {
+            display: none;
+        }
+    }
+}
+@media only screen and (max-width: 992px) and (min-width:768px){
+    .sidebar {
+        width: 250px;
+        padding: 140px 10px;
+        .slideBtn {
+            display: none;
+        }
+        .logo {
+            top: 20px;
+        }
+        .ul {
+            gap:5px;
+            .li {
+                height: 50px;
+                width: 230px;
+            }
+            .search {
+                .input {
+                    width: 190px;
+                }
+            }
+        }
+        .account {
+            height: 80px;
+            width: 230px;
+        }
+        .blurOverLay {
+            display: none;
+        }
+    }
+}
+@media only screen and (max-width: 768px) and (min-width:480px){
+    .sidebar {
+        transform: translateX(100%);
+        width: 250px;
+        padding: 140px 10px;
+        transition: 0.7s;
+        .slideBtn {
+            position: absolute;
+            z-index: 900;
+            left: 0;
+            top: 0;
+            transform: translateX(-100%);
+            width: 30px;
+            height: 30px;
+            box-shadow: -3px 3px 4px rgba($color: #000000, $alpha: 0.2);
+            background-color: #fff;
+            border-radius: 0 0 0 50%;
+            padding: 2px 0 0 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            &::after {
+                content: '';
+                position: absolute;
+                width: 20px;
+                height: 25px;
+                background-color: transparent;
+                right: -5px;
+                box-shadow: -10px 0px 0px -1px  #fff;
+                border-top-left-radius:30px 50px;
+                bottom: -22px;
+                left: 3px;
+                transform: rotateZ(85deg);
+            }
+        }
+        .logo {
+            top: 20px;
+        }
+        .ul {
+            gap:10px;
+            .li {
+                height: 40px;
+                width: 230px;
+            }
+            .search {
+                .input {
+                    width: 190px;
+                }
+            }
+        }
+        .account {
+            height: 80px;
+            width: 230px;
+        }
+        &.active {
+            transform: translateX(0%);
+        }
+    }
+    .blurOverLay {
+        position: fixed;
+        width: 0%;
+        background-color: rgba($color: #000000, $alpha: 0.5);
+        height: 100%;
+        top: 0;
+        left: 0;
+        z-index: 890;
+        transition: 0.7s;
+        &.active {
+            width: calc(100% - 250px);
+        }
+    }
+    @supports(backdrop-filter: blur(0.6rem)){
+        .blurOverLay {
+            background-color: rgba($color: #000000, $alpha: 0.2);
+            backdrop-filter: blur(0.2rem)
+        }
+    }
+}
+@media only screen and (max-width: 480px)and (min-width:370px){
+    .sidebar {
+        transform: translateX(100%);
+        width: 250px;
+        padding: 140px 10px;
+        transition: 0.7s;
+        .slideBtn {
+            position: absolute;
+            z-index: 900;
+            left: 0;
+            top: 0;
+            transform: translateX(-100%);
+            width: 30px;
+            height: 30px;
+            box-shadow: -3px 3px 4px rgba($color: #000000, $alpha: 0.2);
+            background-color: #fff;
+            border-radius: 0 0 0 50%;
+            padding: 2px 0 0 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            &::after {
+                content: '';
+                position: absolute;
+                width: 20px;
+                height: 25px;
+                background-color: transparent;
+                right: -5px;
+                box-shadow: -10px 0px 0px -1px  #fff;
+                border-top-left-radius:30px 50px;
+                bottom: -22px;
+                left: 3px;
+                transform: rotateZ(85deg);
+            }
+        }
+        .logo {
+            top: 20px;
+        }
+        .ul {
+            gap:10px;
+            .li {
+                height: 40px;
+                width: 230px;
+            }
+            .search {
+                .input {
+                    width: 190px;
+                }
+            }
+        }
+        .account {
+            height: 80px;
+            width: 230px;
+        }
+        &.active {
+            transform: translateX(0%);
+        }
+    }
+    .blurOverLay {
+        position: fixed;
+        width: 0%;
+        background-color: rgba($color: #000000, $alpha: 0.5);
+        height: 100%;
+        top: 0;
+        left: 0;
+        z-index: 890;
+        transition: 0.7s;
+        &.active {
+            width: calc(100% - 250px);
+        }
+    }
+    @supports(backdrop-filter: blur(0.6rem)){
+        .blurOverLay {
+            background-color: rgba($color: #000000, $alpha: 0.2);
+            backdrop-filter: blur(0.2rem)
+        }
+    }
+}
+@media only screen and (max-width: 370px){
+    .sidebar {
+        transform: translateX(100%);
+        width: 210px;
+        padding: 130px 10px;
+        transition: 0.7s;
+        .slideBtn {
+            position: absolute;
+            z-index: 900;
+            left: 0;
+            top: 0;
+            transform: translateX(-100%);
+            width: 30px;
+            height: 30px;
+            box-shadow: -3px 3px 4px rgba($color: #000000, $alpha: 0.2);
+            background-color: #fff;
+            border-radius: 0 0 0 50%;
+            padding: 2px 0 0 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            &::after {
+                content: '';
+                position: absolute;
+                width: 20px;
+                height: 25px;
+                background-color: transparent;
+                right: -5px;
+                box-shadow: -10px 0px 0px -1px  #fff;
+                border-top-left-radius:30px 50px;
+                bottom: -22px;
+                left: 3px;
+                transform: rotateZ(85deg);
+            }
+        }
+        .logo {
+            top: 20px;
+        }
+        .ul {
+            gap:10px;
+            .li {
+                height: 40px;
+                width: 190px;
+            }
+            .search {
+                .input {
+                    width: 150px;
+                }
+            }
+        }
+        .account {
+            height: 80px;
+            width: 190px;
+        }
+        &.active {
+            transform: translateX(0%);
+        }
+    }
+    .blurOverLay {
+        position: fixed;
+        width: 0%;
+        background-color: rgba($color: #000000, $alpha: 0.5);
+        height: 100%;
+        top: 0;
+        left: 0;
+        z-index: 890;
+        transition: 0.7s;
+        &.active {
+            width: calc(100% - 210px);
+        }
+    }
+    @supports(backdrop-filter: blur(0.6rem)){
+        .blurOverLay {
+            background-color: rgba($color: #000000, $alpha: 0.2);
+            backdrop-filter: blur(0.2rem)
+        }
+    }
+}
