@@ -6,6 +6,12 @@ import {
   Home,
   Admins,
   AdminLogin,
+  CarTows,
+  Users,
+  Vouchers,
+  Profits,
+  Coupons,
+  Settings
 } from './pages'
 import UserState from './components/UserState';
 import { useSelector } from 'react-redux';
@@ -41,6 +47,12 @@ function App() {
         <UserState />
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/car-tows" element={<CarTows />} />
+          <Route path="/users" element={<Users />} />
+          <Route path="/vouchers" element={<Vouchers />} />
+          <Route path="/profits" element={<Profits />} />
+          <Route path="/coupons" element={<Coupons />} />
+          <Route path="/settings" element={<Settings />} />
           <Route path="/admins" element={<Admins />} />
           <Route path="/login" element={<AdminLogin />}/>
         </Routes>

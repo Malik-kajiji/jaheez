@@ -1,0 +1,22 @@
+import React, { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+import '../styles/home.scss'
+
+export const Coupons = () => {
+    const user = useSelector(state => state.userController.user)
+    const navigate = useNavigate()
+
+    useEffect(() => {
+        if (!user) {
+            navigate('/login')
+        }
+    }, [user])
+
+    return (
+        <section className='container coupons'>
+            <h1 className="TXT-heading color-normal">الكوبونات</h1>
+            <p className="TXT-normal color-light">إدارة الكوبونات</p>
+        </section>
+    )
+}

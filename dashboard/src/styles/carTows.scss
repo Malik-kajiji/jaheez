@@ -1,0 +1,519 @@
+@import './variables';
+@import './colors';
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.spinner {
+    animation: spin 1s linear infinite;
+}
+
+.car-tows-page {
+    margin-right: 300px;
+    padding: map-get($spacing, 'lg');
+    min-height: 100vh;
+    background-color: var(--bg-color);
+
+    @media screen and (max-width: 992px) {
+        margin-right: 0;
+    }
+
+    button.loading {
+        opacity: 0.7;
+        cursor: not-allowed;
+        
+        .spinner {
+            margin: 0 auto;
+        }
+    }
+
+    .header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: map-get($spacing, 'lg');
+        gap: map-get($spacing, 'md');
+
+        .review-requests-btn {
+            display: flex;
+            align-items: center;
+            gap: map-get($spacing, 'sm');
+            padding: map-get($spacing, 'sm') map-get($spacing, 'lg');
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: map-get($border-radius, 'md');
+            cursor: pointer;
+            position: relative;
+
+            .count {
+                position: absolute;
+                top: -8px;
+                right: -8px;
+                background-color: #ef4444;
+                color: white;
+                width: 24px;
+                height: 24px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 12px;
+            }
+
+            &:hover {
+                opacity: 0.9;
+            }
+        }
+
+        .search-bar {
+            position: relative;
+            display: flex;
+            gap: map-get($spacing, 'sm');
+            width: 400px;
+
+            input {
+                flex: 1;
+                height: 40px;
+                padding: 0 map-get($spacing, 'md');
+                border: 1px solid var(--borders-color);
+                border-radius: map-get($border-radius, 'md');
+                background-color: var(--bg-color);
+                color: var(--normal-text-color);
+
+                &:focus {
+                    border-color: var(--primary-color);
+                }
+            }
+
+            .search-btn {
+                display: flex;
+                align-items: center;
+                gap: map-get($spacing, 'xs');
+                padding: 0 map-get($spacing, 'md');
+                background-color: var(--primary-color);
+                color: white;
+                border: none;
+                border-radius: map-get($border-radius, 'md');
+                cursor: pointer;
+
+                .search-icon {
+                    font-size: 18px;
+                }
+
+                &:hover {
+                    opacity: 0.9;
+                }
+            }
+        }
+    }
+
+    .drivers-table {
+        background-color: var(--side-bar-color);
+        border-radius: map-get($border-radius, 'md');
+        overflow: hidden;
+        border: 1px solid var(--borders-color);
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+
+            th, td {
+                padding: map-get($spacing, 'md');
+                text-align: right;
+                border-bottom: 1px solid var(--borders-color);
+            }
+
+            th {
+                background-color: var(--bg-color);
+                color: var(--normal-text-color);
+                font-weight: 600;
+            }
+
+            td {
+                color: var(--normal-text-color);
+
+                .status {
+                    padding: 4px 12px;
+                    border-radius: map-get($border-radius, 'sm');
+                    font-size: map-get($font-sizes, 'footer');
+                    display: inline-block;
+
+                    &.pending {
+                        background-color: #FEF3C7;
+                        color: #92400E;
+                    }
+
+                    &.approved {
+                        background-color: #D1FAE5;
+                        color: #065F46;
+                    }
+                }
+
+                .info-btn {
+                    display: flex;
+                    align-items: center;
+                    gap: map-get($spacing, 'xs');
+                    padding: map-get($spacing, 'xs') map-get($spacing, 'sm');
+                    border-radius: map-get($border-radius, 'sm');
+                    background-color: var(--bg-color);
+                    color: var(--normal-text-color);
+                    border: 1px solid var(--borders-color);
+                    cursor: pointer;
+                    transition: all 0.2s ease;
+
+                    &:hover {
+                        background-color: var(--primary-color);
+                        color: white;
+                        border-color: var(--primary-color);
+                    }
+                }
+            }
+        }
+    }
+
+    .modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.5);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+
+        .modal-content {
+            background-color: var(--side-bar-color);
+            border-radius: map-get($border-radius, 'lg');
+            padding: map-get($spacing, 'xl');
+            width: 100%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            border: 1px solid var(--borders-color);
+
+            h2 {
+                color: var(--normal-text-color);
+                margin-bottom: map-get($spacing, 'lg');
+            }
+
+            &.driver-info-modal {
+                .driver-info {
+                    .info-group {
+                        margin-bottom: map-get($spacing, 'lg');
+                        padding: map-get($spacing, 'md');
+                        background-color: var(--bg-color);
+                        border-radius: map-get($border-radius, 'md');
+                        border: 1px solid var(--borders-color);
+
+                        h3 {
+                            margin-bottom: map-get($spacing, 'md');
+                            color: var(--primary-color);
+                            font-weight: 600;
+                        }
+
+                        p {
+                            margin-bottom: map-get($spacing, 'sm');
+                            color: var(--normal-text-color);
+                        }
+
+                        .ratings-list {
+                            .rating-item {
+                                padding: map-get($spacing, 'sm');
+                                margin-bottom: map-get($spacing, 'xs');
+                                background-color: var(--side-bar-color);
+                                border: 1px solid var(--borders-color);
+                                border-radius: map-get($border-radius, 'sm');
+
+                                &:last-child {
+                                    margin-bottom: 0;
+                                }
+
+                                p {
+                                    margin-bottom: map-get($spacing, 'xs');
+                                    &:last-child {
+                                        margin-bottom: 0;
+                                    }
+                                }
+                            }
+                        }
+
+                        .status-controls {
+                            .ban-control, .warnings-control {
+                                display: flex;
+                                align-items: center;
+                                justify-content: space-between;
+                                margin-bottom: map-get($spacing, 'sm');
+                                padding: map-get($spacing, 'sm');
+                                background-color: var(--side-bar-color);
+                                border-radius: map-get($border-radius, 'sm');
+                                border: 1px solid var(--borders-color);
+
+                                button {
+                                    padding: map-get($spacing, 'xs') map-get($spacing, 'md');
+                                    border-radius: map-get($border-radius, 'sm');
+                                    border: none;
+                                    cursor: pointer;
+                                    min-width: 80px;
+                                    min-height: 32px;
+                                    display: flex;
+                                    align-items: center;
+                                    justify-content: center;
+
+                                    &.ban-btn {
+                                        background-color: #FEE2E2;
+                                        color: #991B1B;
+                                        &:hover:not(.loading) {
+                                            background-color: #DC2626;
+                                            color: white;
+                                        }
+                                    }
+
+                                    &.unban-btn {
+                                        background-color: #D1FAE5;
+                                        color: #065F46;
+                                        &:hover:not(.loading) {
+                                            background-color: #059669;
+                                            color: white;
+                                        }
+                                    }
+                                }
+                            }
+
+                            .warnings-buttons {
+                                display: flex;
+                                gap: map-get($spacing, 'xs');
+
+                                button {
+                                    width: 30px;
+                                    height: 30px;
+                                    border-radius: map-get($border-radius, 'sm');
+                                    border: 1px solid var(--borders-color);
+                                    background-color: var(--bg-color);
+                                    color: var(--normal-text-color);
+                                    cursor: pointer;
+                                    display: flex;
+                                    align-items: center;
+                                    justify-content: center;
+
+                                    &:disabled {
+                                        opacity: 0.5;
+                                        cursor: not-allowed;
+                                    }
+
+                                    &:hover:not(:disabled):not(.loading) {
+                                        background-color: var(--primary-color);
+                                        color: white;
+                                        border-color: var(--primary-color);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            &.requests-modal {
+                .requests-list {
+                    margin: map-get($spacing, 'lg') 0;
+
+                    .no-requests {
+                        text-align: center;
+                        color: var(--light-text-color);
+                        padding: map-get($spacing, 'xl');
+                    }
+
+                    .request-card {
+                        background-color: var(--bg-color);
+                        border-radius: map-get($border-radius, 'md');
+                        padding: map-get($spacing, 'md');
+                        margin-bottom: map-get($spacing, 'md');
+                        display: flex;
+                        gap: map-get($spacing, 'md');
+                        align-items: flex-start;
+                        border: 1px solid var(--borders-color);
+
+                        .car-image {
+                            width: 120px;
+                            height: 120px;
+                            border-radius: map-get($border-radius, 'sm');
+                            object-fit: cover;
+                        }
+
+                        .request-info {
+                            flex: 1;
+
+                            p {
+                                margin-bottom: map-get($spacing, 'xs');
+                                color: var(--normal-text-color);
+
+                                &.status {
+                                    display: inline-block;
+                                    padding: 4px 12px;
+                                    border-radius: map-get($border-radius, 'sm');
+                                    font-size: map-get($font-sizes, 'footer');
+
+                                    &.pending {
+                                        background-color: #FEF3C7;
+                                        color: #92400E;
+                                    }
+
+                                    &.approved {
+                                        background-color: #D1FAE5;
+                                        color: #065F46;
+                                    }
+
+                                    &.rejected {
+                                        background-color: #FEE2E2;
+                                        color: #991B1B;
+                                    }
+                                }
+
+                                &.rejection-reason {
+                                    color: #991B1B;
+                                    font-style: italic;
+                                }
+                            }
+                        }
+
+                        .request-actions {
+                            display: flex;
+                            gap: map-get($spacing, 'sm');
+
+                            button {
+                                padding: map-get($spacing, 'xs') map-get($spacing, 'md');
+                                border-radius: map-get($border-radius, 'sm');
+                                border: none;
+                                cursor: pointer;
+                                font-size: map-get($font-sizes, 'footer');
+                                min-width: 80px;
+                                min-height: 32px;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+
+                                &.approve {
+                                    background-color: #D1FAE5;
+                                    color: #065F46;
+
+                                    &:hover:not(.loading) {
+                                        background-color: #059669;
+                                        color: white;
+                                    }
+                                }
+
+                                &.reject {
+                                    background-color: #FEE2E2;
+                                    color: #991B1B;
+
+                                    &:hover:not(.loading) {
+                                        background-color: #DC2626;
+                                        color: white;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            .close-btn {
+                width: 100%;
+                padding: map-get($spacing, 'sm') 0;
+                background-color: var(--bg-color);
+                border: 1px solid var(--borders-color);
+                border-radius: map-get($border-radius, 'md');
+                color: var(--normal-text-color);
+                cursor: pointer;
+                margin-top: map-get($spacing, 'md');
+
+                &:hover {
+                    background-color: var(--primary-color);
+                    color: white;
+                    border-color: var(--primary-color);
+                }
+            }
+
+            textarea {
+                width: 100%;
+                padding: map-get($spacing, 'sm');
+                border: 1px solid var(--borders-color);
+                border-radius: map-get($border-radius, 'sm');
+                background-color: var(--bg-color);
+                color: var(--normal-text-color);
+                resize: vertical;
+                min-height: 100px;
+
+                &:focus {
+                    border-color: var(--primary-color);
+                    outline: none;
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .car-tows-page {
+        padding: map-get($spacing, 'md');
+
+        .header {
+            flex-direction: column;
+            align-items: stretch;
+
+            .review-requests-btn {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .search-bar {
+                width: 100%;
+            }
+        }
+
+        .drivers-table {
+            overflow-x: auto;
+
+            table {
+                min-width: 800px;
+            }
+        }
+
+        .modal .modal-content {
+            margin: map-get($spacing, 'md');
+            padding: map-get($spacing, 'md');
+
+            &.requests-modal .request-card {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+
+                .car-image {
+                    width: 100%;
+                    max-width: 200px;
+                    height: auto;
+                }
+
+                .request-actions {
+                    width: 100%;
+                    justify-content: center;
+                }
+            }
+
+            &.driver-info-modal {
+                .status-controls {
+                    .ban-control, .warnings-control {
+                        flex-direction: column;
+                        gap: map-get($spacing, 'sm');
+                        text-align: center;
+                    }
+                }
+            }
+        }
+    }
+}

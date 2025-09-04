@@ -324,16 +324,11 @@ input {
     }
 }
 .container {
-    position: relative;
-    display: grid;
-    min-height: 100vh;
+    
 }
 @media only screen and (min-width: 1400px){
     .container {
-        grid-template-columns: repeat(12,1fr);
-        gap: 15px;
-        margin-right: 310px;
-        width: calc(100% - 320px);
+       
     }
     .alert {
         min-width: 350px;
@@ -354,10 +349,7 @@ input {
 }
 @media only screen and (max-width: 1400px) and (min-width:1200px){
     .container {
-        grid-template-columns: repeat(12,1fr);
-        gap: 15px;
-        margin-right: 310px;
-        width: calc(100% - 320px);
+        
     }
     .alert {
         min-width: 350px;
@@ -378,10 +370,7 @@ input {
 }
 @media only screen and (max-width: 1200px) and (min-width:992px) {
     .container {
-        grid-template-columns: repeat(12,1fr);
-        gap: 10px;
-        margin-right: 310px;
-        width: calc(100% - 320px);
+        
     }
 
     .alert {
@@ -403,10 +392,7 @@ input {
 }
 @media only screen and (max-width: 992px) and (min-width:768px){
     .container {
-        grid-template-columns: repeat(12,1fr);
-        gap: 10px;
-        margin-right: 260px;
-        width: calc(100% - 270px);
+        
     }
     .alert {
         min-width: 300px;
@@ -427,10 +413,7 @@ input {
 }
 @media only screen and (max-width: 768px) and (min-width:480px){
     .container {
-        grid-template-columns: repeat(6,1fr);
-        gap: 15px;
-        margin-inline: auto;
-        width: calc(100% - 70px);
+        
     }
     .alert {
         min-width: 200px;
@@ -451,10 +434,7 @@ input {
 }
 @media only screen and (max-width: 480px)and (min-width:370px){
     .container {
-        grid-template-columns: repeat(6,1fr);
-        gap: 15px;
-        margin-inline: auto;
-        width: calc(100% - 50px);
+        
     }
     .alert {
         min-width: 150px;
@@ -475,10 +455,7 @@ input {
 }
 @media only screen and (max-width: 370px){
     .container {
-        grid-template-columns: repeat(6,1fr);
-        gap: 10px;
-        margin-inline: auto;
-        width: 100%;
+        
     }
     .alert {
         min-width: 150px;

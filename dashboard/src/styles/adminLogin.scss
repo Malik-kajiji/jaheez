@@ -1,36 +1,140 @@
+@import './variables';
 @import './colors';
+
 .admin-login {
-    min-height: 100vh;
+  min-height: 100vh;
+  width: 100%;
+  @include flex(column, center, center);
+  background-color: var(--bg-color);
+  transition: map-get($transitions, 'normal');
+
+  .login-container {
+    @include flex(column, center, flex-start);
+    padding: map-get($spacing, 'xl');
+    background-color: var(--side-bar-color);
+    border-radius: map-get($border-radius, 'md');
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    form {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        justify-content: flex-start;
-        label {
-            color: var(--normal-text-color);
-        }
-        input {
-            border: 1px solid var(--borders-color);
-            width: 320px;
-            height: 40px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            background-color: var(--side-bar-color);
-            color: var(--normal-text-color);
-        }
-        p {
-            color: var(--normal-text-color);
-        }
-        a {
-            color: var(--primary-color);
-        }
-        button {
-            width: 120px;
-            height: 40px;
-        }
+    max-width: 400px;
+    
+    .logo {
+      margin-bottom: map-get($spacing, 'lg');
+      img {
+        height: 60px;
+        width: auto;
+      }
     }
+
+    form {
+      width: 100%;
+      @include flex(column, flex-start, stretch);
+      gap: map-get($spacing, 'md');
+
+      .input-group {
+        width: 100%;
+        @include flex(column, flex-start, stretch);
+        gap: map-get($spacing, 'xs');
+
+        label {
+          color: var(--normal-text-color);
+          font-size: map-get($font-sizes, 'normal');
+          font-weight: map-get($font-weights, 'normal');
+        }
+
+        input {
+          width: 100%;
+          height: 44px;
+          border: 1px solid var(--borders-color);
+          border-radius: map-get($border-radius, 'md');
+          padding: 0 map-get($spacing, 'md');
+          background-color: var(--bg-color);
+          color: var(--normal-text-color);
+          transition: map-get($transitions, 'fast');
+
+          &:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 2px var(--secondary-color);
+          }
+        }
+      }
+
+      button {
+        margin-top: map-get($spacing, 'md');
+        width: 100%;
+        height: 44px;
+      }
+    }
+
+    .theme-toggle {
+      margin-top: map-get($spacing, 'lg');
+      width: 100%;
+      @include flex(row, space-between, center);
+      
+      span {
+        color: var(--normal-text-color);
+        font-size: map-get($font-sizes, 'normal');
+      }
+
+      .toggle-switch {
+        position: relative;
+        width: 60px;
+        height: 30px;
+        
+        input {
+          opacity: 0;
+          width: 0;
+          height: 0;
+          
+          &:checked + .slider {
+            background-color: var(--primary-color);
+            
+            &:before {
+              transform: translateX(30px);
+            }
+          }
+        }
+        
+        .slider {
+          position: absolute;
+          cursor: pointer;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background-color: var(--borders-color);
+          transition: map-get($transitions, 'fast');
+          border-radius: 34px;
+          
+          &:before {
+            position: absolute;
+            content: "";
+            height: 22px;
+            width: 22px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: map-get($transitions, 'fast');
+            border-radius: 50%;
+          }
+        }
+      }
+    }
+  }
+
+  @include responsive('lg') {
+    .login-container {
+      padding: map-get($spacing, 'lg');
+      margin: 0 map-get($spacing, 'md');
+    }
+  }
+
+  @include responsive('md') {
+    .login-container {
+      padding: map-get($spacing, 'md');
+      
+      .logo img {
+        height: 50px;
+      }
+    }
+  }
 }

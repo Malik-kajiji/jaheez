@@ -129,7 +129,7 @@ export const useAdmins = () => {
 
     useEffect(()=>{
         if(!user){
-            navigate('/admin-login')
+            navigate('/login')
         }else if(!user.access.includes('owner')){
             navigate('/')
         }else {

@@ -1,0 +1,82 @@
+// Typography
+$font-sizes: (
+  'heading': var(--heading-FS),
+  'heading2': var(--heading2-FS),
+  'heading3': var(--heading3-FS),
+  'button': var(--Btn-FS),
+  'normal': var(--normal-FS),
+  'footer': var(--footer-FS)
+);
+
+$font-weights: (
+  'heading': var(--heading-FW),
+  'heading2': var(--heading2-FW),
+  'heading3': var(--heading3-FW),
+  'normal': var(--normal-FW),
+  'button': var(--Btn-FW),
+  'footer': var(--footer-FW)
+);
+
+// Spacing
+$spacing: (
+  'xs': 4px,
+  'sm': 8px,
+  'md': 16px,
+  'lg': 24px,
+  'xl': 32px
+);
+
+// Border radius
+$border-radius: (
+  'sm': 4px,
+  'md': 8px,
+  'lg': 16px,
+  'round': 50%
+);
+
+// Transitions
+$transitions: (
+  'fast': 0.2s ease-in-out,
+  'normal': 0.3s ease-in-out,
+  'slow': 0.5s ease-in-out
+);
+
+// Breakpoints
+$breakpoints: (
+  'sm': 370px,
+  'md': 480px,
+  'lg': 768px,
+  'xl': 992px,
+  'xxl': 1200px,
+  'xxxl': 1400px
+);
+
+// Z-index
+$z-index: (
+  'base': 1,
+  'dropdown': 10,
+  'modal': 20,
+  'overlay': 30,
+  'tooltip': 40
+);
+
+// Mixins
+@mixin flex($direction: row, $justify: center, $align: center) {
+  display: flex;
+  flex-direction: $direction;
+  justify-content: $justify;
+  align-items: $align;
+}
+
+@mixin theme-aware($property, $light-value, $dark-value) {
+  #{$property}: $light-value;
+  .App.dark & {
+    #{$property}: $dark-value;
+  }
+}
+
+@mixin responsive($breakpoint) {
+  @media screen and (max-width: map-get($breakpoints, $breakpoint)) {
+    @content;
+  }
+}

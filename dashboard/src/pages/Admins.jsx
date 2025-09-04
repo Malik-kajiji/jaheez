@@ -1,120 +1,264 @@
 import React, { useEffect, useState } from 'react'
 import '../styles/admins.scss';
 import { useAdmins } from '../hooks/useAdmins';
+import { FiSearch, FiEdit2, FiTrash2, FiKey, FiPlus, FiAlertCircle } from 'react-icons/fi';
 
 export const Admins = () => {
     const { searched, isLoading, addLoading, handleSearch, handleAdd, handleEdit, handleDelete, handleChangePassword } = useAdmins();
     const [adminToEdit, setAdminToEdit] = useState(null);
     const [isAddShowen, setIsAddShowen] = useState(false);
-
-
     const [changeAdminPass, setChangeAdminPass] = useState(null);
-    const [passInput, setPassInput] = useState('')
-
+    const [passInput, setPassInput] = useState('');
+    const [newAdmin, setNewAdmin] = useState({ username: '', password: '', access: [] });
+    const [adminToDelete, setAdminToDelete] = useState(null);
 
     const handleCancel = () => {
-        setChangeAdminPass(null)
-        setPassInput('')
+        setChangeAdminPass(null);
+        setPassInput('');
     }
 
-    const handelSave = async () => {
-        await handleChangePassword(changeAdminPass, passInput)
-        handleCancel()
+    const handleSave = async () => {
+        await handleChangePassword(changeAdminPass, passInput);
+        handleCancel();
     }
 
+    const handleAddSubmit = async (e) => {
+        e.preventDefault();
+        await handleAdd(newAdmin, setIsAddShowen);
+        setNewAdmin({ username: '', password: '', access: [] });
+    }
 
+    const handleEditSubmit = async (e) => {
+        e.preventDefault();
+        if (adminToEdit) {
+            await handleEdit(adminToEdit.access, adminToEdit._id, setAdminToEdit);
+        }
+    }
 
+    const confirmDelete = async () => {
+        if (adminToDelete) {
+            await handleDelete(adminToDelete);
+            setAdminToDelete(null);
+        }
+    }
 
-    if (isLoading) return <h2>Loading</h2>
+    if (isLoading) {
+        return (
+            <div className="loading-container">
+                <div className="loading-spinner"></div>
+            </div>
+        );
+    }
+
     return (
-        <>
-            <section className='container admins'>
-                <header className='admins-header'>
+        <section className="admins-page">
+            <div className="header">
+                <div className="search-bar">
+                    <FiSearch className="search-icon" />
                     <input
                         type="text"
-                        className='TXT-normal'
-                        placeholder='بحث'
+                        placeholder="بحث عن مسؤول..."
                         onChange={(e) => handleSearch(e.target.value)}
                     />
-                    <button className='P-BTN' onClick={() => setIsAddShowen(true)}>
-                        إضافة مسؤول
-                    </button>
-                </header>
-                <div className='admins-holder'>
-                    {searched.map((e, i) => <article
-                        key={i}
-                        className='admin'
-                    >
-                        <h2 className='TXT-heading2'>{e.username}</h2>
-                        <p className='TXT-normal'><span>
-                            سماحية تعديل المواقع
-                        </span>
-                            <span className='number'>
-                                {e.access.includes('websites') ? 'نعم' : 'لا'}
-                            </span></p>
-                        <p className='TXT-normal'><span>
-                            سماحية تعديل الطلبات
-                        </span>
-                            <span className='number'>
-                                {e.access.includes('orders') ? 'نعم' : 'لا'}
-                            </span></p>
-
-                        <p className='TXT-normal'><span>
-                            سماحية تعديل الحجوزات
-                        </span>
-                            <span className='number'>
-                                {e.access.includes('ordering') ? 'نعم' : 'لا'}
-                            </span></p>
-
-                        <p className='TXT-normal'><span>
-                            سماحية تعديل الشحنات
-                        </span>
-                            <span className='number'>
-                                {e.access.includes('shipments') ? 'نعم' : 'لا'}
-                            </span></p>
-                        <p className='TXT-normal'><span>
-                            سماحية عرض الأرباح
-                        </span>
-                            <span className='number'>
-                                {e.access.includes('profits') ? 'نعم' : 'لا'}
-                            </span></p>
-                        <p className='TXT-normal'><span>
-                            سماحية تعديل المستحقات
-                        </span>
-                            <span className='number'>
-                                {e.access.includes('payments') ? 'نعم' : 'لا'}
-                            </span></p>
-                        <p className='TXT-normal'><span>
-                            سماحية تعديل الكوبونات
-                        </span>
-                            <span className='number'>
-                                {e.access.includes('coupons') ? 'نعم' : 'لا'}
-                            </span></p>
-                        {changeAdminPass === e._id ?
-                            <div className='change-pass-holder'>
-                                <input
-                                    className='change-pass-input TXT-normal color-normal'
-                                    type="text"
-                                    value={passInput}
-                                    onChange={(e) => setPassInput(e.target.value)}
-                                />
-                                <h3 className='save-txt TXT-normal color-normal'>
-                                    <span className='save' onClick={handelSave}>حفظ</span>
-                                    /
-                                    <span className='cancel' onClick={handleCancel}>إلغاء</span>
-                                </h3>
-                            </div>
-                            :
-                            <button className='change-pass-btn S-BTN' onClick={() => setChangeAdminPass(e._id)}>
-                                تغيير الرمز
-                            </button>
-                        }
-                        <button className='P-BTN edit-btn' onClick={() => setAdminToEdit(e)}>
-                            تعديل
-                        </button>
-                    </article>)}
                 </div>
-            </section>
-        </>
-    )
+                <button className="add-btn P-BTN" onClick={() => setIsAddShowen(true)}>
+                    <FiPlus /> إضافة مسؤول جديد
+                </button>
+            </div>
+
+            <div className="admins-list">
+                {searched.map((admin) => (
+                    <div key={admin._id} className="admin-card">
+                        <div className="admin-info">
+                            <h3>{admin.username}</h3>
+                            <div className="access-tags">
+                                {admin.access.map((access) => (
+                                    <span key={access} className="tag">
+                                        {access === 'car-tows' && 'الساحبات'}
+                                        {access === 'users' && 'المستخدمين'}
+                                        {access === 'vouchers' && 'الكروت'}
+                                        {access === 'profits' && 'الأرباح'}
+                                        {access === 'coupons' && 'الكوبونات'}
+                                        {access === 'settings' && 'الإعدادات'}
+                                    </span>
+                                ))}
+                            </div>
+                        </div>
+                        <div className="actions">
+                            <button className="icon-btn" onClick={() => setAdminToEdit(admin)}>
+                                <FiEdit2 />
+                            </button>
+                            <button className="icon-btn" onClick={() => setChangeAdminPass(admin._id)}>
+                                <FiKey />
+                            </button>
+                            <button className="icon-btn delete" onClick={() => setAdminToDelete(admin._id)}>
+                                <FiTrash2 />
+                            </button>
+                        </div>
+                    </div>
+                ))}
+            </div>
+
+            {isAddShowen && (
+                <div className="modal">
+                    <div className="modal-content">
+                        <h2>إضافة مسؤول جديد</h2>
+                        <form onSubmit={handleAddSubmit}>
+                            <div className="input-group">
+                                <label>اسم المستخدم</label>
+                                <input
+                                    type="text"
+                                    value={newAdmin.username}
+                                    onChange={(e) => setNewAdmin({ ...newAdmin, username: e.target.value })}
+                                />
+                            </div>
+                            <div className="input-group">
+                                <label>كلمة المرور</label>
+                                <input
+                                    type="password"
+                                    value={newAdmin.password}
+                                    onChange={(e) => setNewAdmin({ ...newAdmin, password: e.target.value })}
+                                />
+                            </div>
+                            <div className="input-group">
+                                <label>الصلاحيات</label>
+                                <div className="access-options">
+                                    {[
+                                        { value: 'car-tows', label: 'الساحبات' },
+                                        { value: 'users', label: 'المستخدمين' },
+                                        { value: 'vouchers', label: 'الكروت' },
+                                        { value: 'profits', label: 'الأرباح' },
+                                        { value: 'coupons', label: 'الكوبونات' },
+                                        { value: 'settings', label: 'الإعدادات' }
+                                    ].map(({ value, label }) => (
+                                        <label key={value} className="checkbox-label">
+                                            <input
+                                                type="checkbox"
+                                                checked={newAdmin.access.includes(value)}
+                                                onChange={(e) => {
+                                                    if (e.target.checked) {
+                                                        setNewAdmin({ ...newAdmin, access: [...newAdmin.access, value] });
+                                                    } else {
+                                                        setNewAdmin({
+                                                            ...newAdmin,
+                                                            access: newAdmin.access.filter((a) => a !== value),
+                                                        });
+                                                    }
+                                                }}
+                                            />
+                                            {label}
+                                        </label>
+                                    ))}
+                                </div>
+                            </div>
+                            <div className="modal-actions">
+                                <button type="submit" className={`P-BTN ${addLoading ? 'clicked' : ''}`}>
+                                    إضافة
+                                </button>
+                                <button type="button" className="S-BTN" onClick={() => setIsAddShowen(false)}>
+                                    إلغاء
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
+
+            {adminToEdit && (
+                <div className="modal">
+                    <div className="modal-content">
+                        <h2>تعديل الصلاحيات</h2>
+                        <form onSubmit={handleEditSubmit}>
+                            <div className="input-group">
+                                <label>الصلاحيات</label>
+                                <div className="access-options">
+                                    {[
+                                        { value: 'car-tows', label: 'الساحبات' },
+                                        { value: 'users', label: 'المستخدمين' },
+                                        { value: 'vouchers', label: 'الكروت' },
+                                        { value: 'profits', label: 'الأرباح' },
+                                        { value: 'coupons', label: 'الكوبونات' },
+                                        { value: 'settings', label: 'الإعدادات' }
+                                    ].map(({ value, label }) => (
+                                        <label key={value} className="checkbox-label">
+                                            <input
+                                                type="checkbox"
+                                                checked={adminToEdit.access.includes(value)}
+                                                onChange={(e) => {
+                                                    if (e.target.checked) {
+                                                        setAdminToEdit({
+                                                            ...adminToEdit,
+                                                            access: [...adminToEdit.access, value],
+                                                        });
+                                                    } else {
+                                                        setAdminToEdit({
+                                                            ...adminToEdit,
+                                                            access: adminToEdit.access.filter((a) => a !== value),
+                                                        });
+                                                    }
+                                                }}
+                                            />
+                                            {label}
+                                        </label>
+                                    ))}
+                                </div>
+                            </div>
+                            <div className="modal-actions">
+                                <button type="submit" className={`P-BTN ${addLoading ? 'clicked' : ''}`}>
+                                    حفظ
+                                </button>
+                                <button type="button" className="S-BTN" onClick={() => setAdminToEdit(null)}>
+                                    إلغاء
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            )}
+
+            {changeAdminPass && (
+                <div className="modal">
+                    <div className="modal-content">
+                        <h2>تغيير كلمة المرور</h2>
+                        <div className="input-group">
+                            <label>كلمة المرور الجديدة</label>
+                            <input
+                                type="password"
+                                value={passInput}
+                                onChange={(e) => setPassInput(e.target.value)}
+                            />
+                        </div>
+                        <div className="modal-actions">
+                            <button className="P-BTN" onClick={handleSave}>
+                                حفظ
+                            </button>
+                            <button className="S-BTN" onClick={handleCancel}>
+                                إلغاء
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {adminToDelete && (
+                <div className="modal">
+                    <div className="modal-content delete-confirmation">
+                        <div className="warning-icon">
+                            <FiAlertCircle />
+                        </div>
+                        <h2>تأكيد الحذف</h2>
+                        <p>هل أنت متأكد من حذف هذا المسؤول؟</p>
+                        <div className="modal-actions">
+                            <button className="P-BTN delete" onClick={confirmDelete}>
+                                حذف
+                            </button>
+                            <button className="S-BTN" onClick={() => setAdminToDelete(null)}>
+                                إلغاء
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+        </section>
+    );
 }

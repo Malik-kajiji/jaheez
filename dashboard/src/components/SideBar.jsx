@@ -18,132 +18,133 @@ import { FiUsers } from "react-icons/fi";
 import { PiMoneyWavyLight } from "react-icons/pi";
 import { IoSettingsOutline } from "react-icons/io5";
 
-
-
-
-
-
-
 const SideBar = ({theme,toggleTheme}) => {
     const [active,setActive] = useState(false);
     const user = useSelector(state => state.userController.user);
     const { logout } = useLogout();
-    const { pathname } = useLocation()
-
+    const { pathname } = useLocation();
 
     const showTap = tap => (user.access.includes(tap) || user.access.includes('owner'))
 
     return (
         <>
             <aside className={`sidebar ${active? `active`:''}`}>
-                <button className={`slideBtn x-large-fs light-gray`} onClick={()=>setActive(prev => !prev)}>
+                <button className="slideBtn" onClick={()=>setActive(prev => !prev)}>
                     {AiOutlineMenu({})}
                 </button>
-                <div className={`logo`}>
-                    <img src="/images/logo.png" alt="" />
+                <div className="logo">
+                    <img src="/images/logo.png" alt="Logo" />
                 </div>
-                <ul className={'ul'} role='list'>
-                    <Link to='/'>
+                <ul className="ul" role="list">
+                    <Link to="/">
                         <li 
                             className={`li ${pathname === '/' && 'active'}`} 
                             onClick={()=>setActive(false)}
-                            >
-                            <span className={`icon TXT-heading2 color-light`}>{AiOutlineHome({})}</span>
-                            <p className={`text color-normal TXT-heading3`}>الرئيسية</p>
-                        </li >
+                        >
+                            <span className="icon">{AiOutlineHome({})}</span>
+                            <p className="text">الرئيسية</p>
+                        </li>
                     </Link>
-                    {showTap('car-tows') &&
-                        <Link to='/car-tows'>
+                    {showTap('car-tows') && (
+                        <Link to="/car-tows">
                             <li 
                                 className={`li ${pathname === '/car-tows' && 'active'}`} 
                                 onClick={()=>setActive(false)}
                             >
-                                <span className={`icon TXT-heading2 color-light`}>{GiTowTruck({})}</span>
-                                <p className={`text color-normal TXT-heading3`}>الساحبات</p>
+                                <span className="icon">{GiTowTruck({})}</span>
+                                <p className="text">الساحبات</p>
                             </li>
                         </Link>
-                    }
-                    {showTap('users') &&
-                        <Link to='/users'>
+                    )}
+                    {showTap('users') && (
+                        <Link to="/users">
                             <li 
                                 className={`li ${pathname === '/users' && 'active'}`} 
                                 onClick={()=>setActive(false)}
                             >
-                                <span className={`icon TXT-heading2 color-light`}>{FiUsers({})}</span>
-                                <p className={`text color-normal TXT-heading3`}>المستخدمون</p>
+                                <span className="icon">{FiUsers({})}</span>
+                                <p className="text">المستخدمون</p>
                             </li>
                         </Link>
-                    }
-                    {showTap('vouchers') &&
-                        <Link to='/vouchers'>
+                    )}
+                    {showTap('vouchers') && (
+                        <Link to="/vouchers">
                             <li 
                                 className={`li ${pathname === '/vouchers' && 'active'}`} 
                                 onClick={()=>setActive(false)}
                             >
-                                <span className={`icon TXT-heading2 color-light`}>{PiMoneyWavyLight({})}</span>
-                                <p className={`text color-normal TXT-heading3`}>الكروت</p>
+                                <span className="icon">{PiMoneyWavyLight({})}</span>
+                                <p className="text">الكروت</p>
                             </li>
                         </Link>
-                    }
-                    {showTap('profits') &&
-                        <Link to='/profits'>
+                    )}
+                    {showTap('profits') && (
+                        <Link to="/profits">
                             <li 
                                 className={`li ${pathname.startsWith('/profits') && 'active'}`} 
                                 onClick={()=>setActive(false)}
                             >
-                                <span className={`icon TXT-heading2 color-light`}>{FaHandHoldingDollar({})}</span>
-                                <p className={`text color-normal TXT-heading3`}>الأرباح</p>
+                                <span className="icon">{FaHandHoldingDollar({})}</span>
+                                <p className="text">الأرباح</p>
                             </li>
                         </Link>
-                    }
-                    {showTap('coupons') &&
-                        <Link to='/coupons'>
+                    )}
+                    {showTap('coupons') && (
+                        <Link to="/coupons">
                             <li 
                                 className={`li ${pathname === '/coupons' && 'active'}`} 
                                 onClick={()=>setActive(false)}
                             >
-                                <span className={`icon TXT-heading2 color-light`}>{RiCoupon3Line({})}</span>
-                                <p className={`text color-normal TXT-heading3`}>الكوبونات</p>
+                                <span className="icon">{RiCoupon3Line({})}</span>
+                                <p className="text">الكوبونات</p>
                             </li>
                         </Link>
-                    }
-                    {showTap('settings') &&
-                        <Link to='/settings'>
+                    )}
+                    {showTap('settings') && (
+                        <Link to="/settings">
                             <li 
                                 className={`li ${pathname === '/settings' && 'active'}`} 
                                 onClick={()=>setActive(false)}
                             >
-                                <span className={`icon TXT-heading2 color-light`}>{IoSettingsOutline({})}</span>
-                                <p className={`text color-normal TXT-heading3`}>الإعدادات</p>
+                                <span className="icon">{IoSettingsOutline({})}</span>
+                                <p className="text">الإعدادات</p>
                             </li>
                         </Link>
-                    }
-                    {(user.access.includes('owner')) &&
-                        <Link to='/admins'>
+                    )}
+                    {(user.access.includes('owner')) && (
+                        <Link to="/admins">
                             <li 
                                 className={`li ${pathname === '/admins' && 'active'}`} 
                                 onClick={()=>setActive(false)}
                             >
-                                <span className={`icon TXT-heading2 color-light`}>{RiAdminLine({})}</span>
-                                <p className={`text color-normal TXT-heading3`}>المسؤلون</p>
+                                <span className="icon">{RiAdminLine({})}</span>
+                                <p className="text">المسؤلون</p>
                             </li>
                         </Link>
-                    }
+                    )}
                 </ul>
-                <div className='theme'>
-                    <p className='TXT-normal'>السطوع</p>
-                    <button className={`${theme === 'dark' && 'switchLeft'}`} onClick={toggleTheme}>
-                        <span></span>
-                    </button>
+                <div className="theme">
+                    <p>السطوع</p>
+                    <label className="toggle-switch">
+                        <input
+                            type="checkbox"
+                            checked={theme === 'dark'}
+                            onChange={(e) => toggleTheme()}
+                        />
+                        <span className="slider"></span>
+                    </label>
                 </div>
-                <div className='account'>
-                    <span className='logout TXT-heading3 color-light' onClick={logout}>
+                <div className="account">
+                    <div className="user-info">
+                        <p className="username">{user.username}</p>
+                        <p className="role">مدير النظام</p>
+                    </div>
+                    <span className="logout" onClick={logout}>
                         {FiLogOut({})}
                     </span>
-                    <p className='username color-normal TXT-normal'>{user.username}</p>
                 </div>
             </aside>
-            <div className={`blurOverLay ${active? `active`:''}`}></div>
+            <div className={`blurOverLay ${active? `active`:''}`} onClick={()=>setActive(false)}></div>
         </>
     )
 }

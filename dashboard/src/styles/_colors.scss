@@ -1,27 +1,67 @@
-:root {
-    --primary-color:#215ABD;
-    --secondary-color:#D9E2FF;
-    --dark-text-color:#000000;
-    --normal-text-color:#344054;
-    --light-text-color:#667085;
-    --borders-color:#D0D5DD;
-    --bg-color:#fff;
-    --side-bar-color:#fff;
-}
-// --body-color:#18191A;
-//     --slidebar-color:#242526;
-//     --toggle-color:#fff;
-//     --text-color:#ccc;
-//     --footer-color:#72747b;
+// Color palette
+$colors: (
+  'primary': (
+    'light': #215ABD,
+    'dark': #327dff
+  ),
+  'secondary': (
+    'light': #D9E2FF,
+    'dark': #D9E2FF
+  ),
+  'text': (
+    'dark': (
+      'light': #000000,
+      'dark': #464646
+    ),
+    'normal': (
+      'light': #344054,
+      'dark': #ccc
+    ),
+    'light': (
+      'light': #667085,
+      'dark': #ccc
+    )
+  ),
+  'border': (
+    'light': #D0D5DD,
+    'dark': #72747b
+  ),
+  'background': (
+    'light': #fff,
+    'dark': #18191A
+  ),
+  'sidebar': (
+    'light': #fff,
+    'dark': #242526
+  )
+);
 
+:root {
+  --primary-color: #{map-get(map-get($colors, 'primary'), 'light')};
+  --secondary-color: #{map-get(map-get($colors, 'secondary'), 'light')};
+  --dark-text-color: #{map-get(map-get(map-get($colors, 'text'), 'dark'), 'light')};
+  --normal-text-color: #{map-get(map-get(map-get($colors, 'text'), 'normal'), 'light')};
+  --light-text-color: #{map-get(map-get(map-get($colors, 'text'), 'light'), 'light')};
+  --borders-color: #{map-get(map-get($colors, 'border'), 'light')};
+  --bg-color: #{map-get(map-get($colors, 'background'), 'light')};
+  --side-bar-color: #{map-get(map-get($colors, 'sidebar'), 'light')};
+}
 
 .App.dark {
-    --primary-color:#327dff;
-    --secondary-color:#D9E2FF;
-    --dark-text-color:#464646;
-    --normal-text-color:#ccc;
-    --light-text-color:#ccc;
-    --borders-color:#72747b;
-    --bg-color:#18191A;
-    --side-bar-color:#242526;
+  --primary-color: #{map-get(map-get($colors, 'primary'), 'dark')};
+  --secondary-color: #{map-get(map-get($colors, 'secondary'), 'dark')};
+  --dark-text-color: #{map-get(map-get(map-get($colors, 'text'), 'dark'), 'dark')};
+  --normal-text-color: #{map-get(map-get(map-get($colors, 'text'), 'normal'), 'dark')};
+  --light-text-color: #{map-get(map-get(map-get($colors, 'text'), 'light'), 'dark')};
+  --borders-color: #{map-get(map-get($colors, 'border'), 'dark')};
+  --bg-color: #{map-get(map-get($colors, 'background'), 'dark')};
+  --side-bar-color: #{map-get(map-get($colors, 'sidebar'), 'dark')};
+}
+
+// Function to get color value
+@function get-color($category, $variant: 'light', $shade: null) {
+  @if $shade {
+    @return map-get(map-get(map-get($colors, $category), $shade), $variant);
+  }
+  @return map-get(map-get($colors, $category), $variant);
 }
