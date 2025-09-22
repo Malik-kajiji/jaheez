@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import '../styles/sidebar.scss';
 import { AiOutlineHome, AiOutlineMenu } from 'react-icons/ai';
 import { FaHandHoldingDollar } from "react-icons/fa6";
+import { FaMapSigns } from "react-icons/fa";
 import { TbPackages } from 'react-icons/tb';
 import { FiLogOut } from 'react-icons/fi'
 import { RiAdminLine,RiCoupon3Line  } from 'react-icons/ri';
@@ -64,6 +65,17 @@ const SideBar = ({theme,toggleTheme}) => {
                             >
                                 <span className="icon">{FiUsers({})}</span>
                                 <p className="text">المستخدمون</p>
+                            </li>
+                        </Link>
+                    )}
+                    {showTap('trips') && (
+                        <Link to="/trips">
+                            <li
+                                className={`li ${pathname === '/trips' && 'active'}`}
+                                onClick={()=>setActive(false)}
+                            >
+                                <span className="icon">{FaMapSigns({})}</span>
+                                <p className="text">الرحلات</p>
                             </li>
                         </Link>
                     )}

@@ -8,6 +8,7 @@ import {
   AdminLogin,
   CarTows,
   Users,
+  Trips,
   Vouchers,
   Profits,
   Coupons,
@@ -49,6 +50,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/car-tows" element={<CarTows />} />
           <Route path="/users" element={<Users />} />
+          <Route path="/trips" element={<Trips />} />
           <Route path="/vouchers" element={<Vouchers />} />
           <Route path="/profits" element={<Profits />} />
           <Route path="/coupons" element={<Coupons />} />

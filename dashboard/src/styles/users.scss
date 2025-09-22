@@ -10,7 +10,7 @@
     animation: spin 1s linear infinite;
 }
 
-.car-tows-page {
+.users-page {
     margin-right: 300px;
     padding: map-get($spacing, 'lg');
     min-height: 100vh;
@@ -40,41 +40,9 @@
     .header {
         display: flex;
         align-items: center;
-        justify-content: space-between;
+        justify-content: flex-end;
         margin-bottom: map-get($spacing, 'lg');
         gap: map-get($spacing, 'md');
-
-        .review-requests-btn {
-            display: flex;
-            align-items: center;
-            gap: map-get($spacing, 'sm');
-            padding: map-get($spacing, 'sm') map-get($spacing, 'lg');
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            border-radius: map-get($border-radius, 'md');
-            cursor: pointer;
-            position: relative;
-
-            .count {
-                position: absolute;
-                top: -8px;
-                right: -8px;
-                background-color: #ef4444;
-                color: white;
-                width: 24px;
-                height: 24px;
-                border-radius: 50%;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                font-size: 12px;
-            }
-
-            &:hover {
-                opacity: 0.9;
-            }
-        }
 
         .search-bar {
             position: relative;
@@ -109,6 +77,7 @@
                 border: none;
                 border-radius: map-get($border-radius, 'md');
                 cursor: pointer;
+                white-space: nowrap;
 
                 .search-icon {
                     font-size: 18px;
@@ -121,7 +90,7 @@
         }
     }
 
-    .drivers-table {
+    .users-table {
         background-color: var(--side-bar-color);
         border-radius: map-get($border-radius, 'md');
         overflow: hidden;
@@ -155,23 +124,6 @@
             td {
                 color: var(--normal-text-color);
 
-                .status {
-                    padding: 4px 12px;
-                    border-radius: map-get($border-radius, 'sm');
-                    font-size: map-get($font-sizes, 'footer');
-                    display: inline-block;
-
-                    &.pending {
-                        background-color: #FEF3C7;
-                        color: #92400E;
-                    }
-
-                    &.approved {
-                        background-color: #D1FAE5;
-                        color: #065F46;
-                    }
-                }
-
                 .info-btn {
                     display: flex;
                     align-items: center;
@@ -183,6 +135,7 @@
                     border: 1px solid var(--borders-color);
                     cursor: pointer;
                     transition: all 0.2s ease;
+                    white-space: nowrap;
 
                     &:hover {
                         background-color: var(--primary-color);
@@ -222,8 +175,8 @@
                 margin-bottom: map-get($spacing, 'lg');
             }
 
-            &.driver-info-modal {
-                .driver-info {
+            &.user-info-modal {
+                .user-info {
                     .info-group {
                         margin-bottom: map-get($spacing, 'lg');
                         padding: map-get($spacing, 'md');
@@ -270,27 +223,6 @@
 
                                 &:hover {
                                     opacity: 0.9;
-                                }
-                            }
-                        }
-
-                        .ratings-list {
-                            .rating-item {
-                                padding: map-get($spacing, 'sm');
-                                margin-bottom: map-get($spacing, 'xs');
-                                background-color: var(--side-bar-color);
-                                border: 1px solid var(--borders-color);
-                                border-radius: map-get($border-radius, 'sm');
-
-                                &:last-child {
-                                    margin-bottom: 0;
-                                }
-
-                                p {
-                                    margin-bottom: map-get($spacing, 'xs');
-                                    &:last-child {
-                                        margin-bottom: 0;
-                                    }
                                 }
                             }
                         }
@@ -370,110 +302,6 @@
                 }
             }
 
-            &.requests-modal {
-                .requests-list {
-                    margin: map-get($spacing, 'lg') 0;
-
-                    .no-requests {
-                        text-align: center;
-                        color: var(--light-text-color);
-                        padding: map-get($spacing, 'xl');
-                    }
-
-                    .request-card {
-                        background-color: var(--bg-color);
-                        border-radius: map-get($border-radius, 'md');
-                        padding: map-get($spacing, 'md');
-                        margin-bottom: map-get($spacing, 'md');
-                        display: flex;
-                        gap: map-get($spacing, 'md');
-                        align-items: flex-start;
-                        border: 1px solid var(--borders-color);
-
-                        .car-image {
-                            width: 120px;
-                            height: 120px;
-                            border-radius: map-get($border-radius, 'sm');
-                            object-fit: cover;
-                        }
-
-                        .request-info {
-                            flex: 1;
-
-                            p {
-                                margin-bottom: map-get($spacing, 'xs');
-                                color: var(--normal-text-color);
-
-                                &.status {
-                                    display: inline-block;
-                                    padding: 4px 12px;
-                                    border-radius: map-get($border-radius, 'sm');
-                                    font-size: map-get($font-sizes, 'footer');
-
-                                    &.pending {
-                                        background-color: #FEF3C7;
-                                        color: #92400E;
-                                    }
-
-                                    &.approved {
-                                        background-color: #D1FAE5;
-                                        color: #065F46;
-                                    }
-
-                                    &.rejected {
-                                        background-color: #FEE2E2;
-                                        color: #991B1B;
-                                    }
-                                }
-
-                                &.rejection-reason {
-                                    color: #991B1B;
-                                    font-style: italic;
-                                }
-                            }
-                        }
-
-                        .request-actions {
-                            display: flex;
-                            gap: map-get($spacing, 'sm');
-
-                            button {
-                                padding: map-get($spacing, 'xs') map-get($spacing, 'md');
-                                border-radius: map-get($border-radius, 'sm');
-                                border: none;
-                                cursor: pointer;
-                                font-size: map-get($font-sizes, 'footer');
-                                min-width: 80px;
-                                min-height: 32px;
-                                display: flex;
-                                align-items: center;
-                                justify-content: center;
-
-                                &.approve {
-                                    background-color: #D1FAE5;
-                                    color: #065F46;
-
-                                    &:hover:not(.loading) {
-                                        background-color: #059669;
-                                        color: white;
-                                    }
-                                }
-
-                                &.reject {
-                                    background-color: #FEE2E2;
-                                    color: #991B1B;
-
-                                    &:hover:not(.loading) {
-                                        background-color: #DC2626;
-                                        color: white;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-
             .close-btn {
                 width: 100%;
                 padding: map-get($spacing, 'sm') 0;
@@ -490,38 +318,17 @@
                     border-color: var(--primary-color);
                 }
             }
-
-            textarea {
-                width: 100%;
-                padding: map-get($spacing, 'sm');
-                border: 1px solid var(--borders-color);
-                border-radius: map-get($border-radius, 'sm');
-                background-color: var(--bg-color);
-                color: var(--normal-text-color);
-                resize: vertical;
-                min-height: 100px;
-
-                &:focus {
-                    border-color: var(--primary-color);
-                    outline: none;
-                }
-            }
         }
     }
 }
 
 @media screen and (max-width: 768px) {
-    .car-tows-page {
+    .users-page {
         padding: map-get($spacing, 'md');
 
         .header {
             flex-direction: column;
             align-items: stretch;
-
-            .review-requests-btn {
-                width: 100%;
-                justify-content: center;
-            }
 
             .search-bar {
                 width: 100%;
@@ -529,7 +336,7 @@
             }
         }
 
-        .drivers-table {
+        .users-table {
             margin: 0 -#{map-get($spacing, 'md')};
             width: calc(100% + #{map-get($spacing, 'md')} * 2);
             border-radius: 0;
@@ -539,24 +346,7 @@
             margin: map-get($spacing, 'md');
             padding: map-get($spacing, 'md');
 
-            &.requests-modal .request-card {
-                flex-direction: column;
-                align-items: center;
-                text-align: center;
-
-                .car-image {
-                    width: 100%;
-                    max-width: 200px;
-                    height: auto;
-                }
-
-                .request-actions {
-                    width: 100%;
-                    justify-content: center;
-                }
-            }
-
-            &.driver-info-modal {
+            &.user-info-modal {
                 .status-controls {
                     .ban-control, .warnings-control {
                         flex-direction: column;

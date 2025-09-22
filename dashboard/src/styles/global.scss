@@ -1,4 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@100;200;300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Kufi+Arabic:wght@100..900&family=Tajawal:wght@200;300;400;500;700;800;900&display=swap');
+
 code {
     font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
@@ -45,7 +46,9 @@ body {
     min-height: 100vh;
     text-rendering: optimizeSpeed;
     line-height: 1.5;
-    font-family: 'IBM Plex Sans Arabic', sans-serif;
+    font-family: "Noto Kufi Arabic", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
     scrollbar-width: none; 
     -ms-overflow-style: none;
     &::-webkit-scrollbar {

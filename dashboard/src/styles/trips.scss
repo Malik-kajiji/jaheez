@@ -1,0 +1,361 @@
+@import './variables';
+@import './colors';
+
+.trips-page {
+    margin-right: 300px;
+    padding: map-get($spacing, 'lg');
+    min-height: 100vh;
+    background-color: var(--bg-color);
+    max-width: 100%;
+    overflow-x: auto;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+
+    @media screen and (max-width: 992px) {
+        margin-right: 0;
+    }
+
+    .filters {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: map-get($spacing, 'lg');
+        gap: map-get($spacing, 'md');
+
+        .inputs-container {
+            display: flex;
+            gap: map-get($spacing, 'md');
+            flex: 1;
+            justify-content: flex-start;
+
+            .month-filter,
+            .phone-filter {
+                flex: 1;
+                height: 40px;
+                padding: 0 map-get($spacing, 'md');
+                border: 1px solid var(--borders-color);
+                border-radius: map-get($border-radius, 'md');
+                background-color: var(--bg-color);
+                color: var(--normal-text-color);
+                max-width: 260px;
+
+                &:focus {
+                    border-color: var(--primary-color);
+                }
+            }
+        }
+
+        .search-btn {
+            display: flex;
+            height: 40px;
+            align-items: center;
+            gap: map-get($spacing, 'xs');
+            padding: 0 map-get($spacing, 'md');
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: map-get($border-radius, 'md');
+            cursor: pointer;
+            white-space: nowrap;
+
+            .search-icon {
+                font-size: 18px;
+            }
+
+            &:hover {
+                opacity: 0.9;
+            }
+        }
+    }
+
+    .stats {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: map-get($spacing, 'lg');
+
+        .stat-box {
+            background-color: var(--card-bg);
+            padding: map-get($spacing, 'md');
+            border-radius: map-get($border-radius, 'md');
+            display: flex;
+            align-items: center;
+            box-shadow: var(--card-shadow);
+            gap: map-get($spacing, 'md');
+
+            &.right {
+                margin-right: 0;
+            }
+
+            &.left {
+                margin-left: 0;
+            }
+
+            .label {
+                color: var(--normal-text-color);
+                font-size: map-get($font-sizes, 'normal');
+            }
+
+            .value {
+                color: var(--primary-color);
+                font-size: map-get($font-sizes, 'large');
+                font-weight: bold;
+            }
+        }
+    }
+
+    .table-container {
+        background-color: var(--card-bg);
+        border-radius: map-get($border-radius, 'md');
+        // padding: map-get($spacing, 'md');
+        box-shadow: var(--card-shadow);
+        overflow-x: auto;
+        width: 100%;
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 100%;
+
+            th, td {
+                padding: map-get($spacing, 'md');
+                text-align: right;
+                border-bottom: 1px solid var(--border-color);
+                white-space: nowrap;
+
+                &:first-child {
+                    padding-right: map-get($spacing, 'lg');
+                }
+
+                &:last-child {
+                    padding-left: map-get($spacing, 'lg');
+                }
+            }
+
+            th {
+                color: var(--normal-text-color);
+                font-weight: 600;
+            }
+
+            td {
+                color: var(--normal-text-color);
+            }
+
+            .status {
+                padding: map-get($spacing, 'xs') map-get($spacing, 'sm');
+                border-radius: map-get($border-radius, 'sm');
+                font-size: map-get($font-sizes, 'small');
+                font-weight: 500;
+                display: inline-block;
+                min-width: 80px;
+                text-align: center;
+
+                &.pending {
+                    background-color: var(--warning-bg);
+                    color: var(--warning-color);
+                }
+
+                &.completed {
+                    background-color: var(--success-bg);
+                    color: var(--success-color);
+                }
+
+                &.cancelled {
+                    background-color: var(--info-bg);
+                    color: var(--info-color);
+                }
+
+                &.faild {
+                    background-color: var(--danger-bg);
+                    color: var(--danger-color);
+                }
+            }
+
+            .view-trip-btn {
+                display: flex;
+                height: 30px;
+                align-items: center;
+                gap: map-get($spacing, 'xs');
+                padding: 0 map-get($spacing, 'md');
+                background-color: var(--primary-color);
+                color: white;
+                border: none;
+                border-radius: map-get($border-radius, 'md');
+                cursor: pointer;
+                white-space: nowrap;
+
+                .search-icon {
+                    font-size: 18px;
+                }
+
+                &:hover {
+                    opacity: 0.9;
+                }
+            }
+        }
+    }
+
+    .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.5);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+
+        .trip-modal {
+            background-color: var(--bg-color);
+            border-radius: map-get($border-radius, 'md');
+            padding: map-get($spacing, 'lg');
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+
+            &::-webkit-scrollbar {
+                display: none;
+            }
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+
+            h2 {
+                color: var(--normal-text-color);
+                margin-bottom: map-get($spacing, 'lg');
+                text-align: center;
+                font-size: 1.5rem;
+                font-weight: bold;
+            }
+
+            .map-container {
+                margin-bottom: map-get($spacing, 'lg');
+                border: 1px solid var(--border-color);
+                border-radius: map-get($border-radius, 'md');
+                overflow: hidden;
+
+                .leaflet-container {
+                    background-color: var(--card-bg);
+                }
+
+                .leaflet-popup-content-wrapper {
+                    background-color: var(--card-bg);
+                    color: var(--normal-text-color);
+                }
+
+                .leaflet-popup-tip {
+                    background-color: var(--card-bg);
+                }
+            }
+
+            .trip-details {
+                background-color: var(--card-bg);
+                border-radius: map-get($border-radius, 'sm');
+                padding: map-get($spacing, 'md');
+                margin-bottom: map-get($spacing, 'md');
+
+                .detail-row {
+                    display: flex;
+                    justify-content: space-between;
+                    margin-bottom: map-get($spacing, 'md');
+                    padding-bottom: map-get($spacing, 'sm');
+                    border-bottom: 1px solid var(--border-color);
+
+                    &:last-child {
+                        margin-bottom: 0;
+                        padding-bottom: 0;
+                        border-bottom: none;
+                    }
+
+                    .label {
+                        color: var(--normal-text-color);
+                        font-weight: 500;
+                    }
+
+                    .value {
+                        color: var(--normal-text-color);
+                        font-weight: 600;
+                    }
+                }
+            }
+
+            .close-btn {
+                background-color: var(--danger-color);
+                color: white;
+                border: none;
+                padding: map-get($spacing, 'sm') map-get($spacing, 'md');
+                border-radius: map-get($border-radius, 'sm');
+                cursor: pointer;
+                margin-top: map-get($spacing, 'md');
+                width: 100%;
+                transition: all 0.3s ease;
+
+                &:hover {
+                    transform: translateY(-1px);
+                    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+                    filter: brightness(1.1);
+                }
+
+                &:active {
+                    transform: translateY(0);
+                    box-shadow: none;
+                }
+            }
+        }
+    }
+
+    .loading {
+        text-align: center;
+        color: var(--secondary-text-color);
+        padding: map-get($spacing, 'lg');
+    }
+
+    .error {
+        color: var(--danger-color);
+        text-align: center;
+        padding: map-get($spacing, 'md');
+        background-color: var(--danger-bg);
+        border-radius: map-get($border-radius, 'sm');
+        margin-top: map-get($spacing, 'md');
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .trips-page {
+        padding: map-get($spacing, 'md');
+
+        .filters {
+            flex-direction: column;
+            gap: map-get($spacing, 'sm');
+
+            .inputs-container {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .search-btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        .stats {
+            flex-direction: column;
+        }
+
+        .modal-overlay .trip-modal {
+            width: 95%;
+            padding: map-get($spacing, 'md');
+
+            .map-container {
+                margin-bottom: map-get($spacing, 'md');
+            }
+        }
+    }
+}

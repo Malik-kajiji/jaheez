@@ -15,13 +15,18 @@ const loginAsAdmin = async (req,res) => {
             const token = createToken(process.env.OWNER_ID)
             res.status(200).json({
                 username:process.env.OWNER_EMAIL,
-                access:['owner'],
+                access:['owner', 'trips'],
                 token
             })
         }else if(username === process.env.OWNER_EMAIL && password === !process.env.OWNER_PASS){
             res.status(400).json({message:'خطأ في تسجيل الدخول'});
         }else {
             const admin = await adminController.loginAsAdmin(username,password)
+            // Add 'trips' access if not already present
+            if (!admin.access.includes('trips')) {
+                admin.access.push('trips');
+                await adminController.editAccess(admin._id, admin.access);
+            }
             const token = createToken(admin._id)
             res.status(200).json({
                 username:admin.username,

@@ -267,6 +267,12 @@ export const CarTows = () => {
                                 <p>الاسم: {showDriverInfo.driverName}</p>
                                 <p>رقم الهاتف: {showDriverInfo.phoneNumber}</p>
                                 <p>تاريخ الانضمام: {new Date(showDriverInfo.createdAt).toLocaleDateString('ar-LY')}</p>
+                                <div className="trips-info">
+                                    <p>عدد الرحلات: {showDriverInfo.numberOfTrips || 0}</p>
+                                    <button className="view-trips-btn">
+                                        عرض الرحلات
+                                    </button>
+                                </div>
                             </div>
 
                             <div className="info-group">

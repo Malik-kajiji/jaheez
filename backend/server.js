@@ -21,13 +21,19 @@ const ownerAdminRoutes = require('./routes/ownerRoutes/ownerAdminRoutes')
 app.use('/owner',ownerLoginRoutes)
 app.use('/owner-admin',ownerAdminRoutes)
 
-//admin routes
+
+// admin routes
 const adminRoutes = require('./routes/adminRoutes/adminRoutes')
 const carTowRequestRoutes = require('./routes/adminRoutes/carTowRequestRoutes')
+const userRoutes = require('./routes/adminRoutes/userRoutes')
+const tripRoutes = require('./routes/adminRoutes/tripRoutes')
+
 
 // admin end points
 app.use('/admin', adminRoutes)
 app.use('/api/admin', carTowRequestRoutes)
+app.use('/api/admin', userRoutes)
+app.use('/api/admin/trips', tripRoutes)
 
 mongoose.connect(process.env.MONGODB_URL)
 .then(()=>{

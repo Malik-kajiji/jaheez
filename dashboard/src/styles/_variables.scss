@@ -1,78 +1,63 @@
-// Typography
-$font-sizes: (
-  'heading': var(--heading-FS),
-  'heading2': var(--heading2-FS),
-  'heading3': var(--heading3-FS),
-  'button': var(--Btn-FS),
-  'normal': var(--normal-FS),
-  'footer': var(--footer-FS)
-);
-
-$font-weights: (
-  'heading': var(--heading-FW),
-  'heading2': var(--heading2-FW),
-  'heading3': var(--heading3-FW),
-  'normal': var(--normal-FW),
-  'button': var(--Btn-FW),
-  'footer': var(--footer-FW)
-);
-
 // Spacing
 $spacing: (
-  'xs': 4px,
-  'sm': 8px,
+  'xs': 8px,
+  'sm': 12px,
   'md': 16px,
   'lg': 24px,
-  'xl': 32px
+  'xl': 32px,
+  'xxl': 48px
+);
+
+// Font sizes
+$font-sizes: (
+  'xs': 12px,
+  'sm': 14px,
+  'normal': 16px,
+  'lg': 18px,
+  'xl': 24px,
+  'xxl': 32px
+);
+
+// Font weights
+$font-weights: (
+  'light': 300,
+  'normal': 400,
+  'medium': 500,
+  'semibold': 600,
+  'bold': 700
 );
 
 // Border radius
 $border-radius: (
   'sm': 4px,
   'md': 8px,
-  'lg': 16px,
-  'round': 50%
+  'lg': 12px,
+  'xl': 16px,
+  'pill': 9999px
 );
 
 // Transitions
 $transitions: (
-  'fast': 0.2s ease-in-out,
-  'normal': 0.3s ease-in-out,
-  'slow': 0.5s ease-in-out
+  'fast': 0.2s ease,
+  'normal': 0.3s ease,
+  'slow': 0.5s ease
 );
 
 // Breakpoints
 $breakpoints: (
-  'sm': 370px,
-  'md': 480px,
-  'lg': 768px,
-  'xl': 992px,
-  'xxl': 1200px,
-  'xxxl': 1400px
-);
-
-// Z-index
-$z-index: (
-  'base': 1,
-  'dropdown': 10,
-  'modal': 20,
-  'overlay': 30,
-  'tooltip': 40
+  'sm': 480px,
+  'md': 768px,
+  'lg': 992px,
+  'xl': 1200px,
+  'xxl': 1400px
 );
 
 // Mixins
-@mixin flex($direction: row, $justify: center, $align: center) {
+@mixin flex($direction: row, $justify: flex-start, $align: stretch) {
   display: flex;
   flex-direction: $direction;
   justify-content: $justify;
   align-items: $align;
-}
-
-@mixin theme-aware($property, $light-value, $dark-value) {
-  #{$property}: $light-value;
-  .App.dark & {
-    #{$property}: $dark-value;
-  }
 }
 
 @mixin responsive($breakpoint) {
@@ -80,3 +65,22 @@ $z-index: (
     @content;
   }
 }
+
+// Shadows
+$shadows: (
+  'sm': '0 1px 2px rgba(0, 0, 0, 0.05)',
+  'md': '0 4px 6px rgba(0, 0, 0, 0.1)',
+  'lg': '0 10px 15px rgba(0, 0, 0, 0.1)',
+  'xl': '0 20px 25px rgba(0, 0, 0, 0.15)'
+);
+
+// Z-index levels
+$z-index: (
+  'base': 1,
+  'dropdown': 1000,
+  'sticky': 1020,
+  'fixed': 1030,
+  'modal': 1040,
+  'popover': 1050,
+  'tooltip': 1060
+);

@@ -9,13 +9,9 @@ const {
     searchDrivers,
     approveRequest,
     rejectRequest,
-    generateTestData,
     toggleBan,
     updateWarnings
 } = require('../../controllers/adminControllers/carTowRequestController');
-
-// Generate test data (no auth required)
-router.get('/generate-test-data', generateTestData);
 
 // Middleware to verify admin authentication for protected routes
 router.use(async (req, res, next) => {

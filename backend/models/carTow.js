@@ -53,6 +53,11 @@ const carTowSchema = new schema({
         type:Boolean,
         default:false,
         required:true
+    },
+    numberOfTrips: {
+        type:Number,
+        default:0,
+        required:true
     }
 },  { timestamps: true })
 

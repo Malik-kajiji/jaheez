@@ -1,10 +1,5 @@
 const CarTowRequest = require('../../models/carTowRequest');
 const CarTow = require('../../models/carTow');
-const bcrypt = require('bcrypt');
-
-// Convert schema to mongoose.Schema
-const mongoose = require('mongoose');
-const schema = mongoose.Schema;
 
 // Get all car tow drivers with pagination
 const getAllDrivers = async (req, res) => {
@@ -148,62 +143,6 @@ const updateWarnings = async (req, res) => {
     }
 };
 
-// Generate test data
-const generateTestData = async (req, res) => {
-    try {
-        // Generate 10 random drivers
-        const drivers = [];
-        const phonePrefix = '218';
-        const names = ['محمد', 'أحمد', 'علي', 'عمر', 'خالد', 'إبراهيم', 'يوسف', 'حسن', 'عبدالله', 'سالم'];
-        const carModels = ['تويوتا هايلكس', 'نيسان نافارا', 'فورد رينجر', 'ميتسوبيشي L200', 'إيسوزو D-Max'];
-        const imageUrl = 'https://jaheez-images.s3.eu-central-1.amazonaws.com/download.jpg';
-
-        for (let i = 0; i < 10; i++) {
-            const salt = await bcrypt.genSalt(10);
-            const hash = await bcrypt.hash('123456', salt);
-            
-            const driver = await CarTow.create({
-                driverName: names[i],
-                phoneNumber: `${phonePrefix}${91000000 + i}`,
-                password: hash,
-                vechicleType: Math.random() > 0.5 ? 'ساحبة' : 'رافعة',
-                vechicleModel: carModels[Math.floor(Math.random() * carModels.length)],
-                state: 'inactive'
-            });
-            
-            drivers.push(driver);
-        }
-
-        // Generate 5 random requests
-        const requests = [];
-        const plateLetters = ['أ', 'ب', 'ج', 'د', 'ه'];
-        
-        for (let i = 0; i < 5; i++) {
-            const randomDriver = drivers[Math.floor(Math.random() * drivers.length)];
-            const request = await CarTowRequest.create({
-                driverId: randomDriver._id,
-                driverName: randomDriver.driverName,
-                phoneNumber: randomDriver.phoneNumber,
-                state: 'pending',
-                carPlate: `${Math.floor(Math.random() * 99999)} ${plateLetters[Math.floor(Math.random() * plateLetters.length)]}`,
-                carImage: imageUrl,
-                vechicleType: randomDriver.vechicleType,
-                vechicleModel: randomDriver.vechicleModel
-            });
-            
-            requests.push(request);
-        }
-
-        res.status(200).json({
-            message: 'تم إنشاء البيانات بنجاح',
-            driversCount: drivers.length,
-            requestsCount: requests.length
-        });
-    } catch (error) {
-        res.status(400).json({ error: error.message });
-    }
-};
-
 module.exports = {
     getAllDrivers,
     getDriverRequests,
@@ -211,7 +150,6 @@ module.exports = {
     searchDrivers,
     approveRequest,
     rejectRequest,
-    generateTestData,
     toggleBan,
     updateWarnings
 };

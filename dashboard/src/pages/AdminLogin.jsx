@@ -13,19 +13,43 @@ export const AdminLogin = () => {
 
     const [formData, setFormData] = useState({ username: '', password: '' })
     const [theme, setTheme] = useState(localStorage.getItem('theme') || 'light')
+    const [errors, setErrors] = useState({})
     const { username, password } = formData
 
     const handleChange = (e) => {
         const { name, value } = e.target
         setFormData(prev => ({ ...prev, [name]: value }))
+        // Clear error when user starts typing
+        if (errors[name]) {
+            setErrors(prev => ({ ...prev, [name]: '' }))
+        }
     }
 
-    const handleClick = (e) => {
+    const validateForm = () => {
+        const newErrors = {}
+        if (!username.trim()) {
+            newErrors.username = 'اسم المستخدم مطلوب'
+        }
+        if (!password.trim()) {
+            newErrors.password = 'كلمة المرور مطلوبة'
+        }
+        setErrors(newErrors)
+        return Object.keys(newErrors).length === 0
+    }
+
+    const handleClick = async (e) => {
         e.preventDefault()
-        if (username === '' || password === '') {
+        if (!validateForm()) {
             dispatch(alertActions.showAlert({ msg: 'تأكد من ادخال البيانات', type: 'warrning' }))
-        } else {
-            adminLogin(username, password)
+            return
+        }
+        try {
+            await adminLogin(username, password)
+        } catch (error) {
+            setErrors({
+                username: 'خطأ في اسم المستخدم أو كلمة المرور',
+                password: 'خطأ في اسم المستخدم أو كلمة المرور'
+            })
         }
     }
 
@@ -45,7 +69,7 @@ export const AdminLogin = () => {
         if (user) {
             navigate('/')
         }
-    }, [user])
+    }, [user, navigate])
 
     return (
         <section className='admin-login'>
@@ -53,8 +77,9 @@ export const AdminLogin = () => {
                 <div className="logo">
                     <img src="/images/logo.png" alt="Logo" />
                 </div>
-                <form>
-                    <div className="input-group">
+                <h2>تسجيل الدخول للوحة التحكم</h2>
+                <form onSubmit={handleClick}>
+                    <div className={`input-group ${errors.username ? 'error' : ''}`}>
                         <label htmlFor="username" className='TXT-normal'>اسم المستخدم</label>
                         <input
                             type="text"
@@ -62,9 +87,13 @@ export const AdminLogin = () => {
                             name='username'
                             value={username}
                             onChange={handleChange}
+                            placeholder="ادخل اسم المستخدم"
+                            aria-label="اسم المستخدم"
+                            aria-invalid={errors.username ? 'true' : 'false'}
                         />
+                        {errors.username && <span className="error-message">{errors.username}</span>}
                     </div>
-                    <div className="input-group">
+                    <div className={`input-group ${errors.password ? 'error' : ''}`}>
                         <label htmlFor="password" className='TXT-normal'>كلمة المرور</label>
                         <input
                             type="password"
@@ -72,13 +101,19 @@ export const AdminLogin = () => {
                             name='password'
                             value={password}
                             onChange={handleChange}
+                            placeholder="ادخل كلمة المرور"
+                            aria-label="كلمة المرور"
+                            aria-invalid={errors.password ? 'true' : 'false'}
                         />
+                        {errors.password && <span className="error-message">{errors.password}</span>}
                     </div>
                     <button 
-                        className={`P-BTN ${loading ? 'clicked' : ''}`} 
-                        onClick={handleClick}
+                        type="submit"
+                        className={`P-BTN ${loading ? 'clicked' : ''}`}
+                        disabled={loading}
+                        aria-label={loading ? 'جاري تسجيل الدخول' : 'تسجيل الدخول'}
                     >
-                        دخول
+                        {loading ? 'جاري التحميل...' : 'دخول'}
                     </button>
                 </form>
                 <div className="theme-toggle">
@@ -88,6 +123,7 @@ export const AdminLogin = () => {
                             type="checkbox"
                             checked={theme === 'dark'}
                             onChange={toggleTheme}
+                            aria-label="تبديل السطوع"
                         />
                         <span className="slider"></span>
                     </label>
