@@ -1,0 +1,217 @@
+@import './car-tow-variables';
+@import './colors';
+
+.tow-requests {
+  .header {
+    @include flex(row, space-between, center);
+    margin-bottom: map-get($spacing, 'xl');
+
+    .title {
+      h1 {
+        color: var(--dark-text-color);
+        margin-bottom: map-get($spacing, 'xs');
+      }
+      
+      p {
+        color: var(--light-text-color);
+      }
+    }
+
+    .filters {
+      @include flex(row, flex-end, center);
+      gap: map-get($spacing, 'md');
+
+      .filter-btn {
+        padding: map-get($spacing, 'sm') map-get($spacing, 'md');
+        border-radius: map-get($border-radius, 'md');
+        background-color: var(--bg-color);
+        border: 1px solid var(--borders-color);
+        color: var(--normal-text-color);
+        transition: map-get($transitions, 'fast');
+
+        &:hover {
+          border-color: var(--primary-color);
+          color: var(--primary-color);
+        }
+
+        &.active {
+          background-color: var(--primary-color);
+          border-color: var(--primary-color);
+          color: white;
+        }
+      }
+    }
+  }
+
+  .requests-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: map-get($spacing, 'lg');
+
+    .request-card {
+      @include card-base;
+      padding: map-get($spacing, 'lg');
+
+      .request-header {
+        @include flex(row, space-between, flex-start);
+        margin-bottom: map-get($spacing, 'md');
+
+        .request-id {
+          font-size: map-get($font-sizes, 'sm');
+          color: var(--light-text-color);
+        }
+
+        .status-badge {
+          padding: map-get($spacing, 'xs') map-get($spacing, 'sm');
+          border-radius: map-get($border-radius, 'pill');
+          font-size: map-get($font-sizes, 'sm');
+          font-weight: map-get($font-weights, 'medium');
+
+          @each $status, $colors in $status-colors {
+            &.#{$status} {
+              background-color: map-get($colors, 'bg');
+              color: map-get($colors, 'text');
+            }
+          }
+        }
+      }
+
+      .customer-info {
+        margin-bottom: map-get($spacing, 'md');
+
+        .name {
+          font-size: map-get($font-sizes, 'lg');
+          font-weight: map-get($font-weights, 'semibold');
+          color: var(--dark-text-color);
+          margin-bottom: map-get($spacing, 'xs');
+        }
+
+        .contact {
+          @include flex(row, flex-start, center);
+          gap: map-get($spacing, 'sm');
+          color: var(--normal-text-color);
+          font-size: map-get($font-sizes, 'normal');
+
+          svg {
+            width: 16px;
+            height: 16px;
+          }
+        }
+      }
+
+      .location-info {
+        margin-bottom: map-get($spacing, 'md');
+
+        .location-title {
+          font-size: map-get($font-sizes, 'sm');
+          color: var(--light-text-color);
+          margin-bottom: map-get($spacing, 'xs');
+        }
+
+        .location {
+          color: var(--normal-text-color);
+          font-size: map-get($font-sizes, 'normal');
+        }
+      }
+
+      .request-footer {
+        @include flex(row, space-between, center);
+        margin-top: map-get($spacing, 'lg');
+        padding-top: map-get($spacing, 'md');
+        border-top: 1px solid var(--borders-color);
+
+        .time {
+          color: var(--light-text-color);
+          font-size: map-get($font-sizes, 'sm');
+        }
+
+        .actions {
+          @include flex(row, flex-end, center);
+          gap: map-get($spacing, 'sm');
+
+          button {
+            padding: map-get($spacing, 'sm') map-get($spacing, 'md');
+            border-radius: map-get($border-radius, 'md');
+            font-size: map-get($font-sizes, 'sm');
+            transition: map-get($transitions, 'fast');
+
+            &.accept-btn {
+              background-color: var(--success-bg);
+              color: var(--success-color);
+
+              &:hover {
+                background-color: var(--success-color);
+                color: white;
+              }
+            }
+
+            &.reject-btn {
+              background-color: var(--danger-bg);
+              color: var(--danger-color);
+
+              &:hover {
+                background-color: var(--danger-color);
+                color: white;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  // Responsive styles
+  @include responsive('lg') {
+    .requests-grid {
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    }
+  }
+
+  @include responsive('md') {
+    .header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: map-get($spacing, 'md');
+
+      .filters {
+        width: 100%;
+        justify-content: flex-start;
+        overflow-x: auto;
+        padding-bottom: map-get($spacing, 'sm');
+
+        &::-webkit-scrollbar {
+          height: 4px;
+        }
+
+        &::-webkit-scrollbar-thumb {
+          background-color: var(--borders-color);
+          border-radius: map-get($border-radius, 'pill');
+        }
+      }
+    }
+
+    .requests-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @include responsive('sm') {
+    .request-card {
+      .request-footer {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: map-get($spacing, 'md');
+
+        .actions {
+          width: 100%;
+          justify-content: space-between;
+
+          button {
+            flex: 1;
+            text-align: center;
+          }
+        }
+      }
+    }
+  }
+}

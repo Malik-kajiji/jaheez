@@ -1,0 +1,177 @@
+// Loading Animations
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(0.95);
+    opacity: 0.7;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+// Loading Skeleton Styles
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--bg-color) 0px,
+    var(--borders-color) 50%,
+    var(--bg-color) 100%
+  );
+  background-size: 1000px 100%;
+  animation: shimmer 2s infinite linear;
+  border-radius: map-get($border-radius, 'md');
+}
+
+// Loading Spinner
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 3px solid var(--borders-color);
+  border-radius: 50%;
+  border-top-color: var(--primary-color);
+  animation: spin 1s infinite linear;
+}
+
+// Loading States
+.loading-state {
+  @include flex(column, center, center);
+  padding: map-get($spacing, 'xl');
+  gap: map-get($spacing, 'md');
+  
+  .spinner {
+    margin-bottom: map-get($spacing, 'md');
+  }
+  
+  p {
+    color: var(--normal-text-color);
+    font-size: map-get($font-sizes, 'normal');
+  }
+}
+
+// Skeleton Loading Cards
+.skeleton-card {
+  @include card-base;
+  padding: map-get($spacing, 'lg');
+  
+  .skeleton-header {
+    @include flex(row, space-between, center);
+    margin-bottom: map-get($spacing, 'md');
+    
+    .skeleton-id {
+      height: 20px;
+      width: 80px;
+      @extend .skeleton;
+    }
+    
+    .skeleton-status {
+      height: 24px;
+      width: 100px;
+      @extend .skeleton;
+    }
+  }
+  
+  .skeleton-content {
+    .skeleton-title {
+      height: 28px;
+      width: 60%;
+      margin-bottom: map-get($spacing, 'md');
+      @extend .skeleton;
+    }
+    
+    .skeleton-text {
+      height: 16px;
+      width: 100%;
+      margin-bottom: map-get($spacing, 'sm');
+      @extend .skeleton;
+      
+      &:last-child {
+        width: 80%;
+      }
+    }
+  }
+  
+  .skeleton-footer {
+    margin-top: map-get($spacing, 'lg');
+    padding-top: map-get($spacing, 'md');
+    border-top: 1px solid var(--borders-color);
+    @include flex(row, space-between, center);
+    
+    .skeleton-time {
+      height: 16px;
+      width: 100px;
+      @extend .skeleton;
+    }
+    
+    .skeleton-actions {
+      @include flex(row, flex-end, center);
+      gap: map-get($spacing, 'sm');
+      
+      .skeleton-button {
+        height: 36px;
+        width: 80px;
+        @extend .skeleton;
+      }
+    }
+  }
+}
+
+// Animation Mixins
+@mixin animate-in {
+  animation: slideIn 0.3s ease-out forwards;
+}
+
+@mixin animate-fade {
+  animation: fadeIn 0.2s ease-out forwards;
+}
+
+// Transition Mixins
+@mixin smooth-transition {
+  transition: all map-get($transitions, 'normal');
+}
+
+@mixin hover-lift {
+  transition: transform map-get($transitions, 'fast');
+  &:hover {
+    transform: translateY(-2px);
+  }
+}

@@ -5,6 +5,7 @@ import { CarTows } from './CarTows'
 import { Users } from './Users'
 import { Trips } from './Trips'
 import { Vouchers } from './Vouchers'
+import { VoucherVersions } from './VoucherVersions'
 import { Profits } from './Profits'
 import { Coupons } from './Coupons'
 import { Settings } from './Settings'
@@ -17,6 +18,7 @@ export {
     Users,
     Trips,
     Vouchers,
+    VoucherVersions,
     Profits,
     Coupons,
     Settings

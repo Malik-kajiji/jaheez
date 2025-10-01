@@ -27,6 +27,8 @@ const adminRoutes = require('./routes/adminRoutes/adminRoutes')
 const carTowRequestRoutes = require('./routes/adminRoutes/carTowRequestRoutes')
 const userRoutes = require('./routes/adminRoutes/userRoutes')
 const tripRoutes = require('./routes/adminRoutes/tripRoutes')
+const voucherTypeRoutes = require('./routes/adminRoutes/voucherTypeRoutes')
+const voucherRoutes = require('./routes/adminRoutes/voucherRoutes')
 
 
 // admin end points
@@ -34,6 +36,8 @@ app.use('/admin', adminRoutes)
 app.use('/api/admin', carTowRequestRoutes)
 app.use('/api/admin', userRoutes)
 app.use('/api/admin/trips', tripRoutes)
+app.use('/api/admin/voucher-types', voucherTypeRoutes)
+app.use('/api/admin/vouchers', voucherRoutes)
 
 mongoose.connect(process.env.MONGODB_URL)
 .then(()=>{

@@ -81,8 +81,8 @@ const SideBar = ({theme,toggleTheme}) => {
                     )}
                     {showTap('vouchers') && (
                         <Link to="/vouchers">
-                            <li 
-                                className={`li ${pathname === '/vouchers' && 'active'}`} 
+                            <li
+                                className={`li ${pathname.startsWith('/vouchers') && 'active'}`}
                                 onClick={()=>setActive(false)}
                             >
                                 <span className="icon">{PiMoneyWavyLight({})}</span>
