@@ -6,6 +6,7 @@ import { Users } from './Users'
 import { Trips } from './Trips'
 import { Vouchers } from './Vouchers'
 import { VoucherVersions } from './VoucherVersions'
+import { Subscriptions } from './Subscriptions'
 import { Profits } from './Profits'
 import { Coupons } from './Coupons'
 import { Settings } from './Settings'
@@ -19,6 +20,7 @@ export {
     Trips,
     Vouchers,
     VoucherVersions,
+    Subscriptions,
     Profits,
     Coupons,
     Settings

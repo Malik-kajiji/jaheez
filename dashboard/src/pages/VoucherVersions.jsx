@@ -92,8 +92,11 @@ export const VoucherVersions = () => {
         await fetchVouchers(version)
     }
 
-    const handleSearch = (value) => {
+    const handleSearch = async (value) => {
         setSearchTerm(value)
+        if (selectedVersion) {
+            await fetchVouchers(selectedVersion, value)
+        }
     }
 
     const handleCreateVouchers = async (e) => {

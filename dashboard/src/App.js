@@ -11,6 +11,7 @@ import {
   Trips,
   Vouchers,
   VoucherVersions,
+  Subscriptions,
   Profits,
   Coupons,
   Settings
@@ -54,6 +55,7 @@ function App() {
           <Route path="/trips" element={<Trips />} />
           <Route path="/vouchers" element={<Vouchers />} />
           <Route path="/vouchers/:voucherTypeId/versions" element={<VoucherVersions />} />
+          <Route path="/subscriptions" element={<Subscriptions />} />
           <Route path="/profits" element={<Profits />} />
           <Route path="/coupons" element={<Coupons />} />
           <Route path="/settings" element={<Settings />} />

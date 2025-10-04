@@ -18,6 +18,7 @@ import { GiTowTruck } from "react-icons/gi";
 import { FiUsers } from "react-icons/fi";
 import { PiMoneyWavyLight } from "react-icons/pi";
 import { IoSettingsOutline } from "react-icons/io5";
+import { MdSubscriptions } from "react-icons/md";
 
 const SideBar = ({theme,toggleTheme}) => {
     const [active,setActive] = useState(false);
@@ -87,6 +88,17 @@ const SideBar = ({theme,toggleTheme}) => {
                             >
                                 <span className="icon">{PiMoneyWavyLight({})}</span>
                                 <p className="text">الكروت</p>
+                            </li>
+                        </Link>
+                    )}
+                    {showTap('subscriptions') && (
+                        <Link to="/subscriptions">
+                            <li
+                                className={`li ${pathname.startsWith('/subscriptions') && 'active'}`}
+                                onClick={()=>setActive(false)}
+                            >
+                                <span className="icon">{MdSubscriptions({})}</span>
+                                <p className="text">الإشتراكات</p>
                             </li>
                         </Link>
                     )}

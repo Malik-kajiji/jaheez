@@ -3,12 +3,16 @@
 
 .vouchers {
   background-color: var(--bg-color);
-  width: 100%;
+  width: calc(100% - 320px); // Subtract sidebar width
+  max-width: calc(100vw - 320px); // Prevent overflow
+  margin-right: 320px; // Account for fixed sidebar width
+  padding: map-get($spacing, 'xl');
+  transition: all 0.3s ease;
+  box-sizing: border-box;
 
   .header {
     @include flex(row, space-between, center);
     margin-bottom: map-get($spacing, 'xl');
-    margin-right: map-get($spacing, 'xl');
 
     .title {
       h1 {
@@ -37,15 +41,7 @@
   }
 
   .cards-container {
-    margin-right: 330px;
-    width: calc(100% - 330px);
-  }
-
-  @include responsive('lg') {
-    .cards-container {
-      margin-right: 260px;
-      width: calc(100% - 260px);
-    }
+    width: 100%;
   }
 
   .voucher-types {
@@ -73,6 +69,7 @@
         transition: map-get($transitions, 'fast');
         opacity: 0;
         transform: translateY(-5px);
+        z-index: 1;
 
         svg {
           font-size: map-get($font-sizes, 'normal');
@@ -133,28 +130,21 @@
       }
     }
   }
-}
 
-// Handle sidebar closed state
-.sidebar-closed .vouchers {
-  .cards-container {
-    margin-right: 100px;
-    width: calc(100% - 100px);
+  // Responsive breakpoints matching sidebar
+  @media screen and (max-width: 1200px) {
+    width: calc(100% - 300px);
+    max-width: calc(100vw - 300px);
+    margin-right: 300px; // Match sidebar width at this breakpoint
   }
 
-  @include responsive('lg') {
-    .cards-container {
-      margin-right: 80px;
-      width: calc(100% - 80px);
-    }
-  }
-}
+  @media screen and (max-width: 992px) {
+    width: 100%;
+    max-width: 100vw;
+    margin-right: 0; // Sidebar becomes overlay on mobile
+    padding: map-get($spacing, 'lg');
 
-// Responsive styles
-@include responsive('md') {
-  .vouchers {
     .header {
-      margin-right: 0;
       flex-direction: column;
       align-items: flex-start;
       gap: map-get($spacing, 'md');
@@ -163,11 +153,6 @@
         width: 100%;
         justify-content: center;
       }
-    }
-
-    .cards-container {
-      margin-right: 0;
-      width: 100%;
     }
 
     .voucher-types {
@@ -180,6 +165,14 @@
         }
       }
     }
+  }
+
+  @media screen and (max-width: 768px) {
+    padding: map-get($spacing, 'md');
+  }
+
+  @media screen and (max-width: 480px) {
+    padding: map-get($spacing, 'sm');
   }
 }
 
