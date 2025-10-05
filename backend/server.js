@@ -31,6 +31,7 @@ const voucherTypeRoutes = require('./routes/adminRoutes/voucherTypeRoutes')
 const voucherRoutes = require('./routes/adminRoutes/voucherRoutes')
 const subscriptionRoutes = require('./routes/adminRoutes/subscriptionRoutes')
 const profitRoutes = require('./routes/adminRoutes/profitRoutes')
+const couponRoutes = require('./routes/adminRoutes/couponRoutes')
 
 
 // admin end points
@@ -42,6 +43,7 @@ app.use('/api/admin/voucher-types', voucherTypeRoutes)
 app.use('/api/admin/vouchers', voucherRoutes)
 app.use('/api/admin/subscriptions', subscriptionRoutes)
 app.use('/api/admin/profits', profitRoutes)
+app.use('/api/admin/coupons', couponRoutes)
 
 mongoose.connect(process.env.MONGODB_URL)
 .then(()=>{
