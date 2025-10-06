@@ -1,0 +1,465 @@
+@import './car-tow-variables';
+@import './colors';
+
+.reports {
+  background-color: var(--bg-color);
+  width: calc(100% - 320px);
+  max-width: calc(100vw - 320px);
+  margin-right: 320px;
+  padding: map-get($spacing, 'xl');
+  transition: all 0.3s ease;
+  box-sizing: border-box;
+
+  .header {
+    margin-bottom: map-get($spacing, 'xl');
+
+    .title {
+      h1 {
+        margin-bottom: map-get($spacing, 'xs');
+      }
+    }
+  }
+
+  .stats-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: map-get($spacing, 'lg');
+    margin-bottom: map-get($spacing, 'xl');
+
+    .stat-card {
+      background-color: var(--side-bar-color);
+      padding: map-get($spacing, 'lg');
+      border-radius: map-get($border-radius, 'lg');
+      border: 2px solid var(--borders-color);
+      transition: map-get($transitions, 'fast');
+
+      h3 {
+        color: var(--light-text-color);
+        font-size: map-get($font-sizes, 'sm');
+        margin-bottom: map-get($spacing, 'md');
+      }
+
+      .stat-value {
+        color: var(--dark-text-color);
+        font-size: map-get($font-sizes, 'xl');
+        font-weight: map-get($font-weights, 'bold');
+      }
+
+      &.pending {
+        border-color: var(--warning-color);
+        .stat-value {
+          color: var(--warning-color);
+        }
+      }
+
+      &.closed {
+        border-color: var(--success-color);
+        .stat-value {
+          color: var(--success-color);
+        }
+      }
+
+      &.user {
+        border-color: var(--info-color);
+        .stat-value {
+          color: var(--info-color);
+        }
+      }
+
+      &.driver {
+        border-color: var(--primary-color);
+        .stat-value {
+          color: var(--primary-color);
+        }
+      }
+
+      &:hover {
+        transform: translateY(-2px);
+        box-shadow: map-get($shadows, 'md');
+      }
+    }
+  }
+
+  .filters-section {
+    @include flex(row, space-between, center);
+    gap: map-get($spacing, 'lg');
+    margin-bottom: map-get($spacing, 'xl');
+    padding: map-get($spacing, 'lg');
+    background-color: var(--side-bar-color);
+    border-radius: map-get($border-radius, 'lg');
+
+    .search-form {
+      @include flex(row, flex-start, center);
+      flex: 1;
+      max-width: 400px;
+      position: relative;
+
+      input {
+        flex: 1;
+        height: 44px;
+        padding: 0 map-get($spacing, 'md');
+        padding-left: 50px;
+        border: 2px solid var(--borders-color);
+        border-radius: map-get($border-radius, 'md');
+        background-color: var(--bg-color);
+        color: var(--normal-text-color);
+        font-size: map-get($font-sizes, 'normal');
+        transition: map-get($transitions, 'fast');
+
+        &:focus {
+          border-color: var(--primary-color);
+          box-shadow: 0 0 0 3px var(--secondary-color);
+        }
+
+        &::placeholder {
+          color: var(--light-text-color);
+        }
+      }
+
+      button {
+        position: absolute;
+        left: 0;
+        height: 44px;
+        width: 44px;
+        @include flex(row, center, center);
+        background-color: transparent;
+        color: var(--normal-text-color);
+        border: none;
+        transition: map-get($transitions, 'fast');
+
+        &:hover {
+          color: var(--primary-color);
+        }
+      }
+    }
+
+    .filter-group {
+      @include flex(row, flex-start, center);
+      gap: map-get($spacing, 'sm');
+
+      label {
+        color: var(--normal-text-color);
+        font-size: map-get($font-sizes, 'normal');
+        font-weight: map-get($font-weights, 'medium');
+        white-space: nowrap;
+      }
+
+      select {
+        height: 44px;
+        padding: 0 map-get($spacing, 'md');
+        border: 2px solid var(--borders-color);
+        border-radius: map-get($border-radius, 'md');
+        background-color: var(--bg-color);
+        color: var(--normal-text-color);
+        font-size: map-get($font-sizes, 'normal');
+        transition: map-get($transitions, 'fast');
+
+        &:focus {
+          border-color: var(--primary-color);
+          outline: none;
+        }
+      }
+    }
+  }
+
+  .reports-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+    gap: map-get($spacing, 'lg');
+
+    .report-card {
+      @include card-base;
+      padding: map-get($spacing, 'lg');
+      background-color: var(--side-bar-color);
+
+      .card-header {
+        @include flex(row, space-between, center);
+        margin-bottom: map-get($spacing, 'lg');
+        padding-bottom: map-get($spacing, 'md');
+        border-bottom: 2px solid var(--borders-color);
+
+        .reporter-badge {
+          @include flex(row, flex-start, center);
+          gap: map-get($spacing, 'sm');
+          padding: map-get($spacing, 'xs') map-get($spacing, 'md');
+          background-color: var(--bg-color);
+          border-radius: map-get($border-radius, 'md');
+          color: var(--normal-text-color);
+          font-weight: map-get($font-weights, 'medium');
+
+          svg {
+            font-size: map-get($font-sizes, 'normal');
+          }
+        }
+
+        .state-badge {
+          padding: map-get($spacing, 'xs') map-get($spacing, 'sm');
+          border-radius: map-get($border-radius, 'pill');
+          font-size: map-get($font-sizes, 'sm');
+          font-weight: map-get($font-weights, 'medium');
+
+          &.pending {
+            background-color: var(--warning-bg);
+            color: var(--warning-color);
+          }
+
+          &.closed {
+            background-color: var(--success-bg);
+            color: var(--success-color);
+          }
+        }
+      }
+
+      .card-body {
+        .trip-info {
+          margin-bottom: map-get($spacing, 'lg');
+
+          h3 {
+            color: var(--dark-text-color);
+            font-size: map-get($font-sizes, 'lg');
+            font-weight: map-get($font-weights, 'semibold');
+          }
+        }
+
+        .parties-info {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: map-get($spacing, 'md');
+          margin-bottom: map-get($spacing, 'lg');
+
+          .party {
+            padding: map-get($spacing, 'md');
+            background-color: var(--bg-color);
+            border-radius: map-get($border-radius, 'md');
+
+            h4 {
+              color: var(--light-text-color);
+              font-size: map-get($font-sizes, 'sm');
+              margin-bottom: map-get($spacing, 'sm');
+            }
+
+            .name {
+              color: var(--dark-text-color);
+              font-size: map-get($font-sizes, 'normal');
+              font-weight: map-get($font-weights, 'medium');
+              margin-bottom: map-get($spacing, 'xs');
+            }
+
+            .phone {
+              color: var(--normal-text-color);
+              font-size: map-get($font-sizes, 'sm');
+            }
+          }
+        }
+
+        .message-section {
+          margin-bottom: map-get($spacing, 'lg');
+
+          h4 {
+            color: var(--normal-text-color);
+            font-size: map-get($font-sizes, 'normal');
+            font-weight: map-get($font-weights, 'semibold');
+            margin-bottom: map-get($spacing, 'sm');
+          }
+
+          .message {
+            color: var(--normal-text-color);
+            font-size: map-get($font-sizes, 'normal');
+            line-height: 1.6;
+            padding: map-get($spacing, 'md');
+            background-color: var(--bg-color);
+            border-radius: map-get($border-radius, 'md');
+            border-right: 3px solid var(--primary-color);
+          }
+        }
+
+        .attachments {
+          margin-bottom: map-get($spacing, 'lg');
+
+          h4 {
+            @include flex(row, flex-start, center);
+            gap: map-get($spacing, 'sm');
+            color: var(--normal-text-color);
+            font-size: map-get($font-sizes, 'normal');
+            font-weight: map-get($font-weights, 'semibold');
+            margin-bottom: map-get($spacing, 'sm');
+
+            svg {
+              color: var(--primary-color);
+            }
+          }
+
+          .files-list {
+            @include flex(row, flex-start, center);
+            gap: map-get($spacing, 'sm');
+            flex-wrap: wrap;
+
+            .file-link {
+              padding: map-get($spacing, 'xs') map-get($spacing, 'md');
+              background-color: var(--primary-color);
+              color: white;
+              border-radius: map-get($border-radius, 'md');
+              font-size: map-get($font-sizes, 'sm');
+              transition: map-get($transitions, 'fast');
+
+              &:hover {
+                transform: translateY(-1px);
+                box-shadow: map-get($shadows, 'sm');
+              }
+            }
+          }
+        }
+
+        .date-info {
+          @include flex(row, space-between, center);
+          padding-top: map-get($spacing, 'md');
+          border-top: 1px solid var(--borders-color);
+
+          .date-label {
+            color: var(--light-text-color);
+            font-size: map-get($font-sizes, 'sm');
+          }
+
+          .date-value {
+            color: var(--normal-text-color);
+            font-size: map-get($font-sizes, 'sm');
+          }
+        }
+      }
+
+      .card-footer {
+        @include flex(row, space-between, center);
+        gap: map-get($spacing, 'sm');
+        margin-top: map-get($spacing, 'lg');
+        padding-top: map-get($spacing, 'md');
+        border-top: 1px solid var(--borders-color);
+
+        button {
+          @include flex(row, center, center);
+          gap: map-get($spacing, 'xs');
+          padding: map-get($spacing, 'sm') map-get($spacing, 'md');
+          border-radius: map-get($border-radius, 'md');
+          font-size: map-get($font-sizes, 'sm');
+          transition: map-get($transitions, 'fast');
+          flex: 1;
+
+          &.close-btn {
+            background-color: var(--success-bg);
+            color: var(--success-color);
+
+            &:hover {
+              background-color: var(--success-color);
+              color: white;
+            }
+          }
+
+          &.reopen-btn {
+            background-color: var(--warning-bg);
+            color: var(--warning-color);
+
+            &:hover {
+              background-color: var(--warning-color);
+              color: white;
+            }
+          }
+
+          &.delete-btn {
+            background-color: var(--danger-bg);
+            color: var(--danger-color);
+
+            .loading-spinner {
+              width: 16px;
+              height: 16px;
+              border: 2px solid rgba(220, 38, 38, 0.3);
+              border-radius: 50%;
+              border-top-color: var(--danger-color);
+              animation: spin 0.8s linear infinite;
+            }
+
+            &:hover:not(:disabled) {
+              background-color: var(--danger-color);
+              color: white;
+            }
+
+            &:disabled {
+              opacity: 0.7;
+              cursor: not-allowed;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  // Responsive breakpoints
+  @media screen and (max-width: 1200px) {
+    width: calc(100% - 300px);
+    max-width: calc(100vw - 300px);
+    margin-right: 300px;
+  }
+
+  @media screen and (max-width: 992px) {
+    width: 100%;
+    max-width: 100vw;
+    margin-right: 0;
+    padding: map-get($spacing, 'lg');
+
+    .filters-section {
+      flex-direction: column;
+      align-items: stretch;
+
+      .search-form {
+        max-width: 100%;
+      }
+
+      .filter-group {
+        width: 100%;
+        justify-content: space-between;
+
+        select {
+          flex: 1;
+        }
+      }
+    }
+
+    .stats-cards {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .reports-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media screen and (max-width: 768px) {
+    padding: map-get($spacing, 'md');
+
+    .stats-cards {
+      grid-template-columns: 1fr;
+    }
+
+    .report-card {
+      .parties-info {
+        grid-template-columns: 1fr;
+      }
+
+      .card-footer {
+        flex-direction: column;
+
+        button {
+          width: 100%;
+        }
+      }
+    }
+  }
+
+  @media screen and (max-width: 480px) {
+    padding: map-get($spacing, 'sm');
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

@@ -18,7 +18,7 @@ import { GiTowTruck } from "react-icons/gi";
 import { FiUsers } from "react-icons/fi";
 import { PiMoneyWavyLight } from "react-icons/pi";
 import { IoSettingsOutline } from "react-icons/io5";
-import { MdSubscriptions } from "react-icons/md";
+import { MdSubscriptions, MdReport } from "react-icons/md";
 
 const SideBar = ({theme,toggleTheme}) => {
     const [active,setActive] = useState(false);
@@ -124,10 +124,21 @@ const SideBar = ({theme,toggleTheme}) => {
                             </li>
                         </Link>
                     )}
+                    {showTap('reports') && (
+                        <Link to="/reports">
+                            <li
+                                className={`li ${pathname.startsWith('/reports') && 'active'}`}
+                                onClick={()=>setActive(false)}
+                            >
+                                <span className="icon">{MdReport({})}</span>
+                                <p className="text">الشكاوي</p>
+                            </li>
+                        </Link>
+                    )}
                     {showTap('settings') && (
                         <Link to="/settings">
-                            <li 
-                                className={`li ${pathname === '/settings' && 'active'}`} 
+                            <li
+                                className={`li ${pathname === '/settings' && 'active'}`}
                                 onClick={()=>setActive(false)}
                             >
                                 <span className="icon">{IoSettingsOutline({})}</span>

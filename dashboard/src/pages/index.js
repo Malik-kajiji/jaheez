@@ -9,6 +9,7 @@ import { VoucherVersions } from './VoucherVersions'
 import { Subscriptions } from './Subscriptions'
 import { Profits } from './Profits'
 import { Coupons } from './Coupons'
+import { Reports } from './Reports'
 import { Settings } from './Settings'
 
 export {
@@ -23,5 +24,6 @@ export {
     Subscriptions,
     Profits,
     Coupons,
+    Reports,
     Settings
 }
