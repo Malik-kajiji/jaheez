@@ -17,7 +17,7 @@ import { GoTasklist } from "react-icons/go";
 import { GiTowTruck } from "react-icons/gi";
 import { FiUsers } from "react-icons/fi";
 import { PiMoneyWavyLight } from "react-icons/pi";
-import { IoSettingsOutline } from "react-icons/io5";
+import { IoSettingsOutline, IoNotifications } from "react-icons/io5";
 import { MdSubscriptions, MdReport } from "react-icons/md";
 
 const SideBar = ({theme,toggleTheme}) => {
@@ -132,6 +132,17 @@ const SideBar = ({theme,toggleTheme}) => {
                             >
                                 <span className="icon">{MdReport({})}</span>
                                 <p className="text">الشكاوي</p>
+                            </li>
+                        </Link>
+                    )}
+                    {showTap('notifications') && (
+                        <Link to="/notifications">
+                            <li
+                                className={`li ${pathname.startsWith('/notifications') && 'active'}`}
+                                onClick={()=>setActive(false)}
+                            >
+                                <span className="icon">{IoNotifications({})}</span>
+                                <p className="text">الإشعارات</p>
                             </li>
                         </Link>
                     )}

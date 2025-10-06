@@ -10,6 +10,7 @@ import { Subscriptions } from './Subscriptions'
 import { Profits } from './Profits'
 import { Coupons } from './Coupons'
 import { Reports } from './Reports'
+import { Notifications } from './Notifications'
 import { Settings } from './Settings'
 
 export {
@@ -25,5 +26,6 @@ export {
     Profits,
     Coupons,
     Reports,
+    Notifications,
     Settings
 }

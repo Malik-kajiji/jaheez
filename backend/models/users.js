@@ -31,6 +31,9 @@ const userSchema = new schema({
         type:Boolean,
         default:false,
         required:true
+    },
+    expoToken: {
+        type: String,
     }
 },  { timestamps: true })
 

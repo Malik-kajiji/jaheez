@@ -15,6 +15,7 @@ import {
   Profits,
   Coupons,
   Reports,
+  Notifications,
   Settings
 } from './pages'
 import UserState from './components/UserState';
@@ -60,6 +61,7 @@ function App() {
           <Route path="/profits" element={<Profits />} />
           <Route path="/coupons" element={<Coupons />} />
           <Route path="/reports" element={<Reports />} />
+          <Route path="/notifications" element={<Notifications />} />
           <Route path="/settings" element={<Settings />} />
           <Route path="/admins" element={<Admins />} />
           <Route path="/login" element={<AdminLogin />}/>

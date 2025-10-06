@@ -58,6 +58,9 @@ const carTowSchema = new schema({
         type:Number,
         default:0,
         required:true
+    },
+    expoToken: {
+        type: String,
     }
 },  { timestamps: true })
 
