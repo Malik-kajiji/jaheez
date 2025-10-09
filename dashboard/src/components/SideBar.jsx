@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import '../styles/sidebar.scss';
 import { AiOutlineHome, AiOutlineMenu } from 'react-icons/ai';
 import { FaHandHoldingDollar } from "react-icons/fa6";
-import { FaMapSigns } from "react-icons/fa";
+import { FaCog, FaCrown, FaExclamationTriangle, FaMapSigns, FaRoute, FaTag, FaTicketAlt, FaUsers, FaUserShield } from "react-icons/fa";
 import { TbPackages } from 'react-icons/tb';
 import { FiLogOut } from 'react-icons/fi'
 import { RiAdminLine,RiCoupon3Line  } from 'react-icons/ri';
@@ -64,7 +64,7 @@ const SideBar = ({theme,toggleTheme}) => {
                                 className={`li ${pathname === '/users' && 'active'}`} 
                                 onClick={()=>setActive(false)}
                             >
-                                <span className="icon">{FiUsers({})}</span>
+                                <span className="icon">{FaUsers({})}</span>
                                 <p className="text">المستخدمون</p>
                             </li>
                         </Link>
@@ -75,7 +75,7 @@ const SideBar = ({theme,toggleTheme}) => {
                                 className={`li ${pathname === '/trips' && 'active'}`}
                                 onClick={()=>setActive(false)}
                             >
-                                <span className="icon">{FaMapSigns({})}</span>
+                                <span className="icon">{FaRoute({})}</span>
                                 <p className="text">الرحلات</p>
                             </li>
                         </Link>
@@ -86,7 +86,7 @@ const SideBar = ({theme,toggleTheme}) => {
                                 className={`li ${pathname.startsWith('/vouchers') && 'active'}`}
                                 onClick={()=>setActive(false)}
                             >
-                                <span className="icon">{PiMoneyWavyLight({})}</span>
+                                <span className="icon">{FaTicketAlt({})}</span>
                                 <p className="text">الكروت</p>
                             </li>
                         </Link>
@@ -97,7 +97,7 @@ const SideBar = ({theme,toggleTheme}) => {
                                 className={`li ${pathname.startsWith('/subscriptions') && 'active'}`}
                                 onClick={()=>setActive(false)}
                             >
-                                <span className="icon">{MdSubscriptions({})}</span>
+                                <span className="icon">{FaCrown({})}</span>
                                 <p className="text">الإشتراكات</p>
                             </li>
                         </Link>
@@ -119,7 +119,7 @@ const SideBar = ({theme,toggleTheme}) => {
                                 className={`li ${pathname === '/coupons' && 'active'}`} 
                                 onClick={()=>setActive(false)}
                             >
-                                <span className="icon">{RiCoupon3Line({})}</span>
+                                <span className="icon">{FaTag({})}</span>
                                 <p className="text">الكوبونات</p>
                             </li>
                         </Link>
@@ -130,7 +130,7 @@ const SideBar = ({theme,toggleTheme}) => {
                                 className={`li ${pathname.startsWith('/reports') && 'active'}`}
                                 onClick={()=>setActive(false)}
                             >
-                                <span className="icon">{MdReport({})}</span>
+                                <span className="icon">{FaExclamationTriangle({})}</span>
                                 <p className="text">الشكاوي</p>
                             </li>
                         </Link>
@@ -152,7 +152,7 @@ const SideBar = ({theme,toggleTheme}) => {
                                 className={`li ${pathname === '/settings' && 'active'}`}
                                 onClick={()=>setActive(false)}
                             >
-                                <span className="icon">{IoSettingsOutline({})}</span>
+                                <span className="icon">{FaCog({})}</span>
                                 <p className="text">الإعدادات</p>
                             </li>
                         </Link>
@@ -163,7 +163,7 @@ const SideBar = ({theme,toggleTheme}) => {
                                 className={`li ${pathname === '/admins' && 'active'}`} 
                                 onClick={()=>setActive(false)}
                             >
-                                <span className="icon">{RiAdminLine({})}</span>
+                                <span className="icon">{FaUserShield({})}</span>
                                 <p className="text">المسؤلون</p>
                             </li>
                         </Link>
