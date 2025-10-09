@@ -10,10 +10,10 @@ const {
     updatePackage,
     deletePackage
 } = require('../../controllers/adminControllers/settingsController');
-const requireAuth = require('../../middlewares/adminMiddleware');
+const adminMiddleware = require('../../middlewares/adminMiddleware');
 
 // Require authentication for all routes
-router.use(requireAuth);
+router.use((req, res, next) => adminMiddleware(req, res, next, 'settings'));
 
 // GET settings
 router.get('/', getSettings);

@@ -22,7 +22,7 @@ export const Trips = () => {
     // Check authentication
     useEffect(() => {
         if (!user || !user.token) {
-            navigate('/admin-login');
+            navigate('/login');
             return;
         }
     }, [user, navigate]);

@@ -9,10 +9,10 @@ const {
     deleteSubscription,
     getSubscriptionStats
 } = require('../../controllers/adminControllers/subscriptionController');
-const requireAuth = require('../../middlewares/adminMiddleware');
+const adminMiddleware = require('../../middlewares/adminMiddleware');
 
 // Require authentication for all routes
-router.use(requireAuth);
+router.use((req, res, next) => adminMiddleware(req, res, next, 'subscriptions'));
 
 // GET all subscriptions
 router.get('/', getAllSubscriptions);

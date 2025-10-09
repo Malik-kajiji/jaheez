@@ -21,7 +21,7 @@ const useLogin = () => {
             const json = await res.json();
 
             if(res.ok){
-                localStorage.setItem('user',JSON.stringify(json))
+                localStorage.setItem('token',JSON.stringify(json.token))
                 dispatch(alertActions.showAlert({msg:'تم الدخول بنجاح',type:'success'}))
                 dispatch(userActions.setUserData({
                     username:json.username,
@@ -37,7 +37,39 @@ const useLogin = () => {
         setLoading(false)
     }
 
-    return {loading,adminLogin}
+    const getAdminAccess = async ()=>{
+        const token = JSON.parse(localStorage.getItem('token'))
+
+        if (token) {
+            try {
+                const res = await fetch(`${process.env.REACT_APP_API_BASE_URL}/admin/get-access`,{
+                    method:'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}`
+                    }
+                })
+                const json = await res.json();
+    
+                if(res.ok){
+                    localStorage.setItem('user',JSON.stringify(json))
+
+                    dispatch(userActions.setUserData({
+                        username:json.username,
+                        token:token,
+                        access:json.access
+                    }))
+                }else {
+                    dispatch(alertActions.showAlert({msg:json.message,type:'error'}));
+                }
+            }catch(err){
+                dispatch(alertActions.showAlert({msg:err.message,type:'error'}));
+            }
+        }
+
+    }
+
+    return {loading,adminLogin,getAdminAccess}
 }
 
 export default useLogin

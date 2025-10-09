@@ -7,10 +7,10 @@ const {
     getProfitStats,
     createProfit
 } = require('../../controllers/adminControllers/profitController');
-const requireAuth = require('../../middlewares/adminMiddleware');
+const adminMiddleware = require('../../middlewares/adminMiddleware');
 
 // Require authentication for all routes
-router.use(requireAuth);
+router.use((req, res, next) => adminMiddleware(req, res, next, 'profits'));
 
 // GET all profits with filters
 router.get('/', getProfits);

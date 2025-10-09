@@ -15,7 +15,7 @@ const loginAsAdmin = async (req,res) => {
             const token = createToken(process.env.OWNER_ID)
             res.status(200).json({
                 username:process.env.OWNER_EMAIL,
-                access:['owner', 'trips'],
+                access:['owner'],
                 token
             })
         }else if(username === process.env.OWNER_EMAIL && password === !process.env.OWNER_PASS){
@@ -37,6 +37,12 @@ const loginAsAdmin = async (req,res) => {
     }catch(err){
         res.status(400).json({message:err.message});
     }
+}
+
+const getAdminAccess = async (req,res) => {
+    admin = req.admin
+
+    res.status(200).json(admin)
 }
 
 
@@ -117,5 +123,6 @@ const loginAsAdmin = async (req,res) => {
 
 
 module.exports = {
-    loginAsAdmin
+    loginAsAdmin,
+    getAdminAccess
 }

@@ -76,9 +76,13 @@ export const Admins = () => {
                                     <span key={access} className="tag">
                                         {access === 'car-tows' && 'الساحبات'}
                                         {access === 'users' && 'المستخدمين'}
+                                        {access === 'trips' && 'الرحلات'}
                                         {access === 'vouchers' && 'الكروت'}
+                                        {access === 'subscriptions' && 'الإشتراكات'}
                                         {access === 'profits' && 'الأرباح'}
                                         {access === 'coupons' && 'الكوبونات'}
+                                        {access === 'reports' && 'الشكاوي'}
+                                        {access === 'notifications' && 'الإشعارات'}
                                         {access === 'settings' && 'الإعدادات'}
                                     </span>
                                 ))}
@@ -126,9 +130,13 @@ export const Admins = () => {
                                     {[
                                         { value: 'car-tows', label: 'الساحبات' },
                                         { value: 'users', label: 'المستخدمين' },
+                                        { value: 'trips', label: 'الرحلات' },
                                         { value: 'vouchers', label: 'الكروت' },
+                                        { value: 'subscriptions', label: 'الإشتراكات' },
                                         { value: 'profits', label: 'الأرباح' },
                                         { value: 'coupons', label: 'الكوبونات' },
+                                        { value: 'reports', label: 'الشكاوي' },
+                                        { value: 'notifications', label: 'الإشعارات' },
                                         { value: 'settings', label: 'الإعدادات' }
                                     ].map(({ value, label }) => (
                                         <label key={value} className="checkbox-label">
@@ -175,9 +183,13 @@ export const Admins = () => {
                                     {[
                                         { value: 'car-tows', label: 'الساحبات' },
                                         { value: 'users', label: 'المستخدمين' },
+                                        { value: 'trips', label: 'الرحلات' },
                                         { value: 'vouchers', label: 'الكروت' },
+                                        { value: 'subscriptions', label: 'الإشتراكات' },
                                         { value: 'profits', label: 'الأرباح' },
                                         { value: 'coupons', label: 'الكوبونات' },
+                                        { value: 'reports', label: 'الشكاوي' },
+                                        { value: 'notifications', label: 'الإشعارات' },
                                         { value: 'settings', label: 'الإعدادات' }
                                     ].map(({ value, label }) => (
                                         <label key={value} className="checkbox-label">
