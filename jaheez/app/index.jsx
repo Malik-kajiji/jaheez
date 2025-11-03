@@ -3,7 +3,7 @@ import { Platform, StyleSheet, Text, View } from 'react-native';
 
 
 export default function HomeScreen() {
-    console.log('hello 2-2-2-2-2-2-2-2-2-2-2-2-2-2-2-2')
+    
   return (
     <View >
       <Text>
