@@ -9,12 +9,13 @@ export const userController = createSlice({
             const user = {
                 username:action.payload.username,
                 phoneNumber:action.payload.phoneNumber,
+                numberOfTrips:action.payload.numberOfTrips,
+                warrnings:action.payload.warrnings,
                 isBanned:action.payload.isBanned,
                 isVerified:action.payload.isVerified,
                 token:action.payload.token,
             }
             state.user = user
-            AsyncStorage.setItem('user',JSON.stringify({...user}))
         },
         logOut: (state,action) => {
             state.user = null

@@ -24,6 +24,10 @@ const FONT = {
     GE_SS_Light1:'GE_SS_Light1',
     GE_SS_Medium:'GE_SS_Medium',
     GE_SS_Medium1:'GE_SS_Medium1',
+    Montserrat_Bold:'Montserrat_Bold',
+    Montserrat_Semi_Bold:'Montserrat_Semi_Bold',
+    Montserrat_Regular:'Montserrat_Regular',
+    Montserrat_Light:'Montserrat_Light'
 }
 
 const SIZES = {
@@ -47,139 +51,139 @@ const DIMENSIONS = () => {
 }
 
 
-const MAIN_SCREEN_OPTIONS = (router,IconComponent,name) => ({
-    header: (props) => {
-        return (
-            <View style={{ backgroundColor: COLORS.bgColor, height: 120 }}>
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20,height: 120,paddingTop:35 }}>
-                    <TouchableOpacity onPress={() => router.push('/')} style={{}}>
-                        <Image
-                            source={require('../images/dark-logo.png')}
-                            style={{ width: 50, height: 50, borderRadius: 25 }}
-                        />
-                    </TouchableOpacity>
-                    <View>
-                        <Text style={{ fontSize: SIZES.large, fontFamily: FONT.CrExtraBold,color:COLORS.DarkTextColor, textAlign: 'right' }}>
-                            مرحبا بك في مود
-                        </Text>
-                        <Text style={{ fontSize: SIZES.medium, fontFamily: FONT.CrRegular,color:COLORS.LightTextColor2, textAlign: 'right' }}>
-                            إختــــار بمزاجــــــــــك
-                        </Text>
-                    </View>
-                    <TouchableOpacity onPress={() => router.push('/cart')} style={{ backgroundColor: '#F5F6FA', width: 50, height: 50, borderRadius: 25, alignItems: 'center', justifyContent: 'center' }}>
-                        <Ionicons name="bag-handle-outline" size={28} color="black" />
-                    </TouchableOpacity>
-                </View>
-            </View>
-        );
-    },
-    headerShadowVisible: true,
-    tabBarIcon: ({ color }) =><View style={{width:DIMENSIONS().screenWidth / 4, height:90,alignItems:'center',justifyContent:'center'}}>
-    <IconComponent size={28} name={name} color={color} /></View>,
-    title: '',
-    tabBarStyle: { 
-        height: 90, 
-        display:"flex",
-        flexDirection:'row',
-        alignItems:'flex-start',
-        paddingTop:25
-    },
-})
+// const MAIN_SCREEN_OPTIONS = (router,IconComponent,name) => ({
+//     header: (props) => {
+//         return (
+//             <View style={{ backgroundColor: COLORS.bgColor, height: 120 }}>
+//                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20,height: 120,paddingTop:35 }}>
+//                     <TouchableOpacity onPress={() => router.push('/')} style={{}}>
+//                         <Image
+//                             source={require('../images/dark-logo.png')}
+//                             style={{ width: 50, height: 50, borderRadius: 25 }}
+//                         />
+//                     </TouchableOpacity>
+//                     <View>
+//                         <Text style={{ fontSize: SIZES.large, fontFamily: FONT.CrExtraBold,color:COLORS.DarkTextColor, textAlign: 'right' }}>
+//                             مرحبا بك في مود
+//                         </Text>
+//                         <Text style={{ fontSize: SIZES.medium, fontFamily: FONT.CrRegular,color:COLORS.LightTextColor2, textAlign: 'right' }}>
+//                             إختــــار بمزاجــــــــــك
+//                         </Text>
+//                     </View>
+//                     <TouchableOpacity onPress={() => router.push('/cart')} style={{ backgroundColor: '#F5F6FA', width: 50, height: 50, borderRadius: 25, alignItems: 'center', justifyContent: 'center' }}>
+//                         <Ionicons name="bag-handle-outline" size={28} color="black" />
+//                     </TouchableOpacity>
+//                 </View>
+//             </View>
+//         );
+//     },
+//     headerShadowVisible: true,
+//     tabBarIcon: ({ color }) =><View style={{width:DIMENSIONS().screenWidth / 4, height:90,alignItems:'center',justifyContent:'center'}}>
+//     <IconComponent size={28} name={name} color={color} /></View>,
+//     title: '',
+//     tabBarStyle: { 
+//         height: 90, 
+//         display:"flex",
+//         flexDirection:'row',
+//         alignItems:'flex-start',
+//         paddingTop:25
+//     },
+// })
 
-const MAIN_HOME_TAB_OPTIONS = (router) => ({
-    header: (props) => {
-        return (
-            <View style={{ backgroundColor: COLORS.bgColor, height: 120 }}>
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20,height: 120,paddingTop:35 }}>
-                    <TouchableOpacity onPress={() => router.push('/')} style={{}}>
-                        <Image
-                            source={require('../images/dark-logo.png')}
-                            style={{ width: 50, height: 50, borderRadius: 25 }}
-                        />
-                    </TouchableOpacity>
-                    <View>
-                        <Text style={{ fontSize: SIZES.large, fontFamily: FONT.CrExtraBold,color:COLORS.DarkTextColor, textAlign: 'right' }}>
-                            مرحبا بك في مود
-                        </Text>
-                        <Text style={{ fontSize: SIZES.medium,color:COLORS.LightTextColor2, fontFamily: FONT.CrRegular, textAlign: 'right' }}>
-                            إختــــار بمزاجــــــــــك
-                        </Text>
-                    </View>
-                    <TouchableOpacity onPress={() => router.push('/cart')} style={{ backgroundColor: '#F5F6FA', width: 50, height: 50, borderRadius: 25, alignItems: 'center', justifyContent: 'center' }}>
-                        <Ionicons name="bag-handle-outline" size={28} color="black" />
-                    </TouchableOpacity>
-                </View>
-            </View>
-        );
-    },
-    headerShadowVisible: true,
-});
+// const MAIN_HOME_TAB_OPTIONS = (router) => ({
+//     header: (props) => {
+//         return (
+//             <View style={{ backgroundColor: COLORS.bgColor, height: 120 }}>
+//                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20,height: 120,paddingTop:35 }}>
+//                     <TouchableOpacity onPress={() => router.push('/')} style={{}}>
+//                         <Image
+//                             source={require('../images/dark-logo.png')}
+//                             style={{ width: 50, height: 50, borderRadius: 25 }}
+//                         />
+//                     </TouchableOpacity>
+//                     <View>
+//                         <Text style={{ fontSize: SIZES.large, fontFamily: FONT.CrExtraBold,color:COLORS.DarkTextColor, textAlign: 'right' }}>
+//                             مرحبا بك في مود
+//                         </Text>
+//                         <Text style={{ fontSize: SIZES.medium,color:COLORS.LightTextColor2, fontFamily: FONT.CrRegular, textAlign: 'right' }}>
+//                             إختــــار بمزاجــــــــــك
+//                         </Text>
+//                     </View>
+//                     <TouchableOpacity onPress={() => router.push('/cart')} style={{ backgroundColor: '#F5F6FA', width: 50, height: 50, borderRadius: 25, alignItems: 'center', justifyContent: 'center' }}>
+//                         <Ionicons name="bag-handle-outline" size={28} color="black" />
+//                     </TouchableOpacity>
+//                 </View>
+//             </View>
+//         );
+//     },
+//     headerShadowVisible: true,
+// });
 
-const MAIN_WEBSITE_TAB_OPTIONS = (router) => ({
-    header: (props) => {
-        return (
-            <View style={{ backgroundColor: COLORS.bgColor, height: 120 }}>
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20,height: 120,paddingTop:35 }}>
-                    <TouchableOpacity onPress={() => router.back()} style={{ backgroundColor: '#F5F6FA', width: 50, height: 50, borderRadius: 25, alignItems: 'center', justifyContent: 'center' }}>
-                        <AntDesign name="arrowleft" size={28} color="black" />
-                    </TouchableOpacity>
-                    <View>
-                        <Text style={{ fontSize: SIZES.large, fontFamily: FONT.CrExtraBold,color:COLORS.DarkTextColor, textAlign: 'right' }}>
-                            مرحبا بك في مود
-                        </Text>
-                        <Text style={{ fontSize: SIZES.medium,color:COLORS.LightTextColor2, fontFamily: FONT.CrRegular, textAlign: 'right' }}>
-                            إختــــار بمزاجــــــــــك
-                        </Text>
-                    </View>
-                    <TouchableOpacity onPress={() => router.push('/cart')} style={{ backgroundColor: '#F5F6FA', width: 50, height: 50, borderRadius: 25, alignItems: 'center', justifyContent: 'center' }}>
-                        <Ionicons name="bag-handle-outline" size={28} color="black" />
-                    </TouchableOpacity>
-                </View>
-            </View>
-        );
-    },
-    headerShadowVisible: true,
-});
+// const MAIN_WEBSITE_TAB_OPTIONS = (router) => ({
+//     header: (props) => {
+//         return (
+//             <View style={{ backgroundColor: COLORS.bgColor, height: 120 }}>
+//                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20,height: 120,paddingTop:35 }}>
+//                     <TouchableOpacity onPress={() => router.back()} style={{ backgroundColor: '#F5F6FA', width: 50, height: 50, borderRadius: 25, alignItems: 'center', justifyContent: 'center' }}>
+//                         <AntDesign name="arrowleft" size={28} color="black" />
+//                     </TouchableOpacity>
+//                     <View>
+//                         <Text style={{ fontSize: SIZES.large, fontFamily: FONT.CrExtraBold,color:COLORS.DarkTextColor, textAlign: 'right' }}>
+//                             مرحبا بك في مود
+//                         </Text>
+//                         <Text style={{ fontSize: SIZES.medium,color:COLORS.LightTextColor2, fontFamily: FONT.CrRegular, textAlign: 'right' }}>
+//                             إختــــار بمزاجــــــــــك
+//                         </Text>
+//                     </View>
+//                     <TouchableOpacity onPress={() => router.push('/cart')} style={{ backgroundColor: '#F5F6FA', width: 50, height: 50, borderRadius: 25, alignItems: 'center', justifyContent: 'center' }}>
+//                         <Ionicons name="bag-handle-outline" size={28} color="black" />
+//                     </TouchableOpacity>
+//                 </View>
+//             </View>
+//         );
+//     },
+//     headerShadowVisible: true,
+// });
 
 
-    const NON_LOGGED_HEADER = (router) => ({
-        header: (props) => (<View style={{ backgroundColor: 'trasnparent', height: 120 }}>
-                    <View style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', paddingTop:30, paddingHorizontal: 20,height: 120 }}>
-                        <TouchableOpacity onPress={() => router.back()} style={{ backgroundColor: '#F5F6FA', width: 50, height: 50, borderRadius: 25, alignItems: 'center', justifyContent: 'center' }}>
-                            <AntDesign name="arrowleft" size={28} color="black" />
-                        </TouchableOpacity>
-                    </View>
-                </View>),
-        headerShadowVisible: true,
-    })
+//     const NON_LOGGED_HEADER = (router) => ({
+//         header: (props) => (<View style={{ backgroundColor: 'trasnparent', height: 120 }}>
+//                     <View style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', paddingTop:30, paddingHorizontal: 20,height: 120 }}>
+//                         <TouchableOpacity onPress={() => router.back()} style={{ backgroundColor: '#F5F6FA', width: 50, height: 50, borderRadius: 25, alignItems: 'center', justifyContent: 'center' }}>
+//                             <AntDesign name="arrowleft" size={28} color="black" />
+//                         </TouchableOpacity>
+//                     </View>
+//                 </View>),
+//         headerShadowVisible: true,
+//     })
 
-    const MY_ACCOUNT_HEADER_OPTIONS = (router,user) => ({
-        header: (props) => (<View style={{ backgroundColor: 'trasnparent', height: 120 }}>
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingTop:30, paddingHorizontal: 20,height: 120 }}>
-                        <TouchableOpacity onPress={() => router.back()} style={{ backgroundColor: '#F5F6FA', width: 50, height: 50, borderRadius: 25, alignItems: 'center', justifyContent: 'center' }}>
-                            <AntDesign name="arrowleft" size={28} color="black" />
-                        </TouchableOpacity>
-                        <View style={{alignItems:'center',justifyContent:'center'}}>
-                            <Text style={{color:COLORS.NormalTextColor,fontFamily:FONT.CrBold,fontSize:SIZES.large}}>
-                                حسابي
-                            </Text>
-                        </View>
-                        <TouchableOpacity onPress={() => router.push('/cart')} style={{ backgroundColor: '#F5F6FA', width: 50, height: 50, borderRadius: 25, alignItems: 'center', justifyContent: 'center' }}>
-                            <Ionicons name="bag-handle-outline" size={28} color="black" />
-                        </TouchableOpacity>
-                    </View>
-                </View>),
-        headerShadowVisible: true,
-    })
+//     const MY_ACCOUNT_HEADER_OPTIONS = (router,user) => ({
+//         header: (props) => (<View style={{ backgroundColor: 'trasnparent', height: 120 }}>
+//                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingTop:30, paddingHorizontal: 20,height: 120 }}>
+//                         <TouchableOpacity onPress={() => router.back()} style={{ backgroundColor: '#F5F6FA', width: 50, height: 50, borderRadius: 25, alignItems: 'center', justifyContent: 'center' }}>
+//                             <AntDesign name="arrowleft" size={28} color="black" />
+//                         </TouchableOpacity>
+//                         <View style={{alignItems:'center',justifyContent:'center'}}>
+//                             <Text style={{color:COLORS.NormalTextColor,fontFamily:FONT.CrBold,fontSize:SIZES.large}}>
+//                                 حسابي
+//                             </Text>
+//                         </View>
+//                         <TouchableOpacity onPress={() => router.push('/cart')} style={{ backgroundColor: '#F5F6FA', width: 50, height: 50, borderRadius: 25, alignItems: 'center', justifyContent: 'center' }}>
+//                             <Ionicons name="bag-handle-outline" size={28} color="black" />
+//                         </TouchableOpacity>
+//                     </View>
+//                 </View>),
+//         headerShadowVisible: true,
+//     })
 
 
 
 
 export {
     COLORS,FONT,SIZES,DIMENSIONS,
-    MAIN_HOME_TAB_OPTIONS,
-    MAIN_SCREEN_OPTIONS,
-    NON_LOGGED_HEADER,
-    MY_ACCOUNT_HEADER_OPTIONS,
-    MAIN_WEBSITE_TAB_OPTIONS,
+    // MAIN_HOME_TAB_OPTIONS,
+    // MAIN_SCREEN_OPTIONS,
+    // NON_LOGGED_HEADER,
+    // MY_ACCOUNT_HEADER_OPTIONS,
+    // MAIN_WEBSITE_TAB_OPTIONS,
 }

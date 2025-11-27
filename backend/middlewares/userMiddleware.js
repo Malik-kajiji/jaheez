@@ -1,8 +1,8 @@
 const JWT = require('jsonwebtoken');
-const userModel = require('../models/user')
+const userModel = require('../models/users')
 
 
-const vendorMiddleware = async (req,res,next)=>{
+const userMiddleware = async (req,res,next)=>{
     const { authorization } = req.headers
 
     if(!authorization){
@@ -15,8 +15,8 @@ const vendorMiddleware = async (req,res,next)=>{
         const exists = await userModel.findOne({_id});
 
         if(exists && !exists.isBanned){
-            const { username,phoneNumber,locations,favorites,isBanned,isVerified } = exists
-            req.user = {user_id:_id,username,phoneNumber,locations,favorites,isBanned,isVerified}
+            const { userName,phoneNumber,numberOfTrips,warrnings,isBanned,isVerified } = exists
+            req.user = {userId:_id,userName,phoneNumber,numberOfTrips,warrnings,isBanned,isVerified}
         }else if(exists?.isBanned) {    
             throw Error('الحساب محظور')
         }else {
@@ -28,4 +28,4 @@ const vendorMiddleware = async (req,res,next)=>{
     }
 }
 
-module.exports = vendorMiddleware
+module.exports = userMiddleware

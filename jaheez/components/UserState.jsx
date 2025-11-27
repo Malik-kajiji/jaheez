@@ -1,25 +1,23 @@
 import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { useRouter, useSegments } from "expo-router";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { userActions } from "../redux/userState";
 
 const UserState = () => {
-    const dispatch = useDispatch()
-    const { login } = userActions
+    const dispatch = useDispatch();
+    const router = useRouter();
+    const segments = useSegments();
+    const { login } = userActions;
 
     const BACKEND_URL = process.env.EXPO_PUBLIC_BACKEND_URL;
     
-    
-    
-    useEffect(()=>{
-        // AsyncStorage.clear()
+    useEffect(() => {
         AsyncStorage.getItem('token').then(res => {
             if(res){
-                getData(res)
-            }else {
-
+                getData(res);
             }
-        })
+        });
 
         const getData = async (token) => {
             try {
@@ -29,33 +27,43 @@ const UserState = () => {
                         'Content-Type':'application/json',
                         'authorization': `bearer ${token}`
                     }
-                })
+                });
 
-                const json = await res.json()
+                const json = await res.json();
                 if(res.status === 401){
-                    AsyncStorage.clear()
+                    await AsyncStorage.clear();
+                    return;
                 }
                 if(!res.ok){
-                    throw Error(json.message)
+                    throw Error(json.message);
                 }
+                
                 const {
                     username,
                     phoneNumber,
-                    locations,
+                    numberOfTrips,
+                    warrnings,
                     isBanned,
-                    isVerified,
-                    favorites:favoritesProducts,
-                } = json
+                    isVerified
+                } = json;
 
-                dispatch(login({username,phoneNumber,isBanned,isVerified,token}))
+                dispatch(login({username,phoneNumber,numberOfTrips,warrnings,isBanned,isVerified,token}));
+                
+                // Redirect to user home if not already there
+                const inAuthGroup = segments[0] === '(user)';
+                if (!inAuthGroup) {
+                    router.replace('/(user)');
+                }
             }catch(err){
-                console.log(err.message)
+                console.log(err.message);
+                await AsyncStorage.clear();
             }
-        }
-    },[])
+        };
+    },[]);
+    
     return (
         <></>
-    )
-}
+    );
+};
 
 export default UserState;

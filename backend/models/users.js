@@ -32,24 +32,45 @@ const userSchema = new schema({
         default:false,
         required:true
     },
+    isVerified: {
+        type:Boolean,
+        default:false,
+        required:true
+    },
+    otpCode: {
+        type: String,
+    },
     expoToken: {
         type: String,
     }
 },  { timestamps: true })
 
-userSchema.statics.signup = async function(userName, phoneNumber, password) {
+function generateRandomCode() {
+    const characters = '0123456789';
+    let code = '';
+
+    for (let i = 0; i < 4; i++) {
+        code += characters.charAt(Math.floor(Math.random() * characters.length));
+    }
+
+    return code;
+}
+
+userSchema.statics.signup = async function(userName, phoneNumber, password,expoToken) {
     const salt = await bcrypt.genSalt(10);
     const hash = await bcrypt.hash(password,salt)
     const user = await this.create({
         userName,
         phoneNumber,
         password:hash,
+        otpCode:generateRandomCode(),
+        expoToken
     })
 
     return user
 }
 
-userSchema.statics.login = async function(phoneNumber,password) {
+userSchema.statics.login = async function(phoneNumber,password,expoToken) {
     const user = await this.findOne({phoneNumber})
     if(!user){
         throw Error('رقم الهاتف غير موجود')
@@ -61,7 +82,24 @@ userSchema.statics.login = async function(phoneNumber,password) {
         throw Error('كلمة مرور غير صحيحة')
     }
 
+    this.findOneAndUpdate({_id:user._id},{expoToken})
     return user
+}
+
+userSchema.statics.verifyUser = async function(userId,OTPCode) {
+    const user = await this.findOne({_id:userId})
+    if(!user){
+        throw Error('المستخدم غير موجود')
+    }
+
+    if(OTPCode == user.otpCode){
+        await this.findOneAndUpdate({_id:user._id},{isVerified:true})
+
+        return {...user._doc,isVerified:true}
+    }else {
+        throw Error('رمز otp خاطئ')
+    }
+
 }
 
 module.exports = mongoose.model('user',userSchema)

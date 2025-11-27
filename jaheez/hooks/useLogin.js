@@ -3,19 +3,22 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import { ALERT_TYPE, Toast, Dialog } from 'react-native-alert-notification'
 import { userActions } from '../redux/userState'
 import { useState } from 'react'
+import { useRouter } from 'expo-router'
 
 const useLogin = () => {
     const dispatch = useDispatch()
+    const router = useRouter()
     const user = useSelector(state => state.userController.user)
     const BACKEND_URL = process.env.EXPO_PUBLIC_BACKEND_URL;
     const [isSignupLoading,setIsSignUpLoading] = useState(false)
+    const [isLoginLoading,setIsLoginLoading] = useState(false)
     const [isResetLoading,setIsResetLoading] = useState(false)
     const [error,setError] = useState(null)
 
     const { logOut,login,verifyUser } = userActions
 
-    const loginAsUser = async (phoneNumber,password) => {
-        setIsSignUpLoading(true)
+    const loginAsUser = async (phoneNumber,password,expoToken) => {
+        setIsLoginLoading(true)
         if((phoneNumber.length < 10 || !phoneNumber.startsWith('09'))){
             setError('الرجاء إدخال رقم صالح!')
             Toast.show({
@@ -23,6 +26,7 @@ const useLogin = () => {
                 title: 'ملاحظة',
                 textBody: 'الرجاء إدخال رقم صالح!',
             })
+            setIsLoginLoading(false)
         }else if(password.length < 8){
             setError('الرجاء إدخال رمز لا يقل عن 8 أحرف!')
             Toast.show({
@@ -30,14 +34,15 @@ const useLogin = () => {
                 title: 'ملاحظة',
                 textBody: 'الرجاء إدخال رمز لا يقل عن 8 أحرف!',
             })
+            setIsLoginLoading(false)
         }else {
             try {
-                const res = await fetch(`${BACKEND_URL}/user/login`,{
+                const res = await fetch(`${BACKEND_URL}/api/user/login`,{
                     method:'POST',
                     headers: {
                         'Content-Type':'application/json'
                     },
-                    body:JSON.stringify({phoneNumber,password})
+                    body:JSON.stringify({phoneNumber,password,expoToken})
                 })
 
                 const json = await res.json()
@@ -45,9 +50,21 @@ const useLogin = () => {
                     setError(json.message)
                     throw Error(json.message)
                 }
-                const { username,locations,isBanned,isVerified,favorites,token } = json
-                AsyncStorage.setItem('token',token)
-                dispatch(login({username,phoneNumber,isBanned,isVerified,token}))
+
+                const { username,phoneNumber:userPhone,numberOfTrips,warrnings,isBanned,isVerified,token } = json
+                await AsyncStorage.setItem('token',token)
+                if(expoToken) {
+                    await AsyncStorage.setItem('expoToken',expoToken)
+                }
+                dispatch(login({username,phoneNumber:userPhone,numberOfTrips,warrnings,isBanned,isVerified,token}))
+                
+                Toast.show({
+                    type: ALERT_TYPE.SUCCESS,
+                    title: 'نجاح',
+                    textBody: 'تم تسجيل الدخول بنجاح',
+                })
+                
+                router.replace('/(user)/home')
             }catch(err){
                 Toast.show({
                     type: ALERT_TYPE.DANGER,
@@ -55,24 +72,13 @@ const useLogin = () => {
                     textBody: err.message,
                 })
             }
-        }
-        setIsSignUpLoading(false)
-    }
-    //signup functions
-    const getLocations = async () => {
-        try {
-            const res = await AsyncStorage.getItem('locations')
-            if(res){
-                return JSON.parse(res)
-            }else {
-                return []
-            }            
-        } catch (error) {
-            return [];
+            setIsLoginLoading(false)
         }
     }
 
-    const signUp = async (phoneNumber,username,password) => {
+
+    const signUp = async (phoneNumber,firstName,lastName,password,expoToken) => {
+        setIsSignUpLoading(true)
         if((phoneNumber.length < 10 || !phoneNumber.startsWith('09'))){
             setError('الرجاء إدخال رقم هاتف صالح!')
             Toast.show({
@@ -80,13 +86,23 @@ const useLogin = () => {
                 title: 'ملاحظة',
                 textBody: 'الرجاء إدخال رقم هاتف صالح!',
             })
-        }else if(username.length < 3){
-            setError('الرجاء إدخال اسم مستخدم صالح!')
+            setIsSignUpLoading(false)
+        }else if(!firstName || firstName.length < 2){
+            setError('الرجاء إدخال الاسم الأول!')
             Toast.show({
                 type: ALERT_TYPE.WARNING,
                 title: 'ملاحظة',
-                textBody: 'الرجاء إدخال اسم مستخدم صالح!',
+                textBody: 'الرجاء إدخال الاسم الأول!',
             })
+            setIsSignUpLoading(false)
+        }else if(!lastName || lastName.length < 2){
+            setError('الرجاء إدخال الاسم الأخير!')
+            Toast.show({
+                type: ALERT_TYPE.WARNING,
+                title: 'ملاحظة',
+                textBody: 'الرجاء إدخال الاسم الأخير!',
+            })
+            setIsSignUpLoading(false)
         }else if(password.length < 8){
             setError('الرجاء إدخال رمز لا يقل عن 8 أحرف!')
             Toast.show({
@@ -94,27 +110,38 @@ const useLogin = () => {
                 title: 'ملاحظة',
                 textBody: 'الرجاء إدخال رمز لا يقل عن 8 أحرف!',
             })
+            setIsSignUpLoading(false)
         }else {
-            setIsSignUpLoading(true)
             try {
-
-                const res = await fetch(`${BACKEND_URL}/user/sign-up`,{
+                const res = await fetch(`${BACKEND_URL}/api/user/signup`,{
                     method:'POST',
                     headers: {
                         'Content-Type':'application/json'
                     },
-                    body:JSON.stringify({username,phoneNumber,password})
+                    body:JSON.stringify({firstName,lastName,phoneNumber,password,expoToken})
                 })
 
                 const json = await res.json()
-                const { locations,isBanned,isVerified,favorites,cartItems,token } = json
 
                 if(!res.ok){
                     setError(json.message)
                     throw Error(json.message)
                 }
-                AsyncStorage.setItem('token',token)
-                dispatch(login({username,phoneNumber,isBanned,isVerified,token}))
+                
+                const { username,phoneNumber:userPhone,numberOfTrips,warrnings,isBanned,isVerified,token } = json
+                await AsyncStorage.setItem('token',token)
+                if(expoToken) {
+                    await AsyncStorage.setItem('expoToken',expoToken)
+                }
+                dispatch(login({username,phoneNumber:userPhone,numberOfTrips,warrnings,isBanned,isVerified,token}))
+                
+                Toast.show({
+                    type: ALERT_TYPE.SUCCESS,
+                    title: 'نجاح',
+                    textBody: 'تم إنشاء الحساب بنجاح',
+                })
+                
+                router.replace('/(user)/home')
             }catch(err){
                 Toast.show({
                     type: ALERT_TYPE.DANGER,
@@ -125,8 +152,9 @@ const useLogin = () => {
             setIsSignUpLoading(false)
         }
     }
-    const verifyUserByCode = async (code,setIsShowen) => {
-        if(code.length < 4){
+    
+    const verifyUserByCode = async (OTPCode,setIsShowen) => {
+        if(OTPCode.length < 4){
             Toast.show({
                 type: ALERT_TYPE.WARNING,
                 title: 'ملاحظة',
@@ -134,13 +162,13 @@ const useLogin = () => {
             })
         }else {
             try {
-                const res = await fetch(`${BACKEND_URL}/user/verify-user`,{
+                const res = await fetch(`${BACKEND_URL}/api/user/verify-user`,{
                     method:'PUT',
                     headers: {
                         'Content-Type':'application/json',
                         'authorization': `bearer ${user?.token}`
                     },
-                    body:JSON.stringify({code})
+                    body:JSON.stringify({OTPCode})
                 })
 
                 const json = await res.json()
@@ -163,15 +191,22 @@ const useLogin = () => {
             }
         }
     }
-    const handleLogOut = () => {
-        AsyncStorage.clear().then(()=>{
+    
+    const handleLogOut = async () => {
+        try {
+            await AsyncStorage.removeItem('token')
+            await AsyncStorage.removeItem('expoToken')
             dispatch(logOut())
-        })
+            router.replace('/')
+        } catch(err) {
+            console.error('Logout error:', err)
+        }
     }
+    
     const getUserData = async () => {
         try {
             const storageToken = await AsyncStorage.getItem('token')
-            const res = await fetch(`${BACKEND_URL}/user/get-user-data`,{
+            const res = await fetch(`${BACKEND_URL}/api/user/get-data`,{
                 method:'GET',
                 headers: {
                     'Content-Type':'application/json',
@@ -182,14 +217,13 @@ const useLogin = () => {
             const {
                 username,
                 phoneNumber,
-                locations,
+                numberOfTrips,
+                warrnings,
                 isBanned,
-                isVerified,
-                favorites,
-                cartItems
+                isVerified
             } = json
 
-            dispatch(login({username,phoneNumber,isBanned,isVerified,token:storageToken}))
+            dispatch(login({username,phoneNumber,numberOfTrips,warrnings,isBanned,isVerified,token:storageToken}))
         }catch(err){
             Toast.show({
                 type: ALERT_TYPE.DANGER,
@@ -198,6 +232,7 @@ const useLogin = () => {
             })
         }
     }
+    
     const handleResendMessage = async () => {
         try {
             const res = await fetch(`${BACKEND_URL}/user/resend-message`,{
@@ -223,45 +258,6 @@ const useLogin = () => {
                 title: 'خطأ',
                 textBody: err.message,
             })
-        }
-    }
-    const handleDeleteAccount = async (password) => {
-        if(password === ''){
-            Toast.show({
-                type: ALERT_TYPE.WARNING,
-                title: 'ملاحظة',
-                textBody: 'الرجاء إدخال الرمز',
-            })
-        }else {
-            try {    
-                const res = await fetch(`${BACKEND_URL}/user/delete-user`,{
-                    method:'DELETE',
-                    headers: {
-                        'Content-Type':'application/json',
-                        'authorization': `bearer ${user?.token}`
-                    },
-                    body:JSON.stringify({password})
-                })
-    
-                if(!res.ok){
-                    throw Error('json.message')
-                }
-                setTimeout(()=>{
-                    handleLogOut()
-                },1000)
-                Dialog.show({
-                    type: ALERT_TYPE.SUCCESS,
-                    title: 'نجاح',
-                    textBody: 'تم حذف حسابك بنجاح!',
-                    button: 'إغلاق',
-                })
-            }catch(err){
-                Toast.show({
-                    type: ALERT_TYPE.DANGER,
-                    title: 'خطأ',
-                    textBody: err.message,
-                })
-            }
         }
     }
 
@@ -326,7 +322,7 @@ const useLogin = () => {
         setIsResetLoading(false)
     }
 
-    return {loginAsUser,signUp,verifyUserByCode,handleLogOut,getUserData,handleResendMessage,isSignupLoading,handleDeleteAccount,handleSendResetMessage,handleResetPassword,isResetLoading,error}
+    return {loginAsUser,signUp,verifyUserByCode,handleLogOut,getUserData,handleResendMessage,isSignupLoading,isLoginLoading,handleSendResetMessage,handleResetPassword,isResetLoading,error}
 }
 
 export default useLogin

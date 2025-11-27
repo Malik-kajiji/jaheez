@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -7,88 +7,38 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   Platform,
-  Image,
-  ActivityIndicator
+  Image
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { ALERT_TYPE, Toast } from 'react-native-alert-notification';
-import useLogin from '../hooks/useLogin';
 import { styles } from '../styles/index.styles';
-import { COLORS } from '../constants/constants';
 
-export default function HomeScreen() {
+export default function DriverLoginScreen() {
   const router = useRouter();
-  const { loginAsUser, signUp, isLoginLoading, isSignupLoading } = useLogin();
-  
   const [isLogin, setIsLogin] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
   const [agreeToTerms, setAgreeToTerms] = useState(false);
-  const [expoToken, setExpoToken] = useState('');
 
   // Form states
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
+  const [birthDate, setBirthDate] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
-  useEffect(() => {
-    // Get expo token from AsyncStorage
-    AsyncStorage.getItem('expoToken').then(token => {
-      if (token) {
-        setExpoToken(token);
-      }
-    });
-  }, []);
-
-  const handleLogin = async () => {
-    if (!phoneNumber || !password) {
-      Toast.show({
-        type: ALERT_TYPE.WARNING,
-        title: 'ملاحظة',
-        textBody: 'تأكد من ملئ الحقول!',
-      });
-      return;
-    }
-    await loginAsUser(phoneNumber, password, expoToken);
+  const handleLogin = () => {
+    // Login logic will be implemented later
+    console.log('Driver Login pressed');
   };
 
-  const handleSignup = async () => {
-    if (!firstName || !lastName || !phoneNumber || !password || !confirmPassword) {
-      Toast.show({
-        type: ALERT_TYPE.WARNING,
-        title: 'ملاحظة',
-        textBody: 'تأكد من ملئ الحقول!',
-      });
-      return;
-    }
-    
-    if (password !== confirmPassword) {
-      Toast.show({
-        type: ALERT_TYPE.WARNING,
-        title: 'ملاحظة',
-        textBody: 'كلمة المرور غير متطابقة!',
-      });
-      return;
-    }
-    
-    if (!agreeToTerms) {
-      Toast.show({
-        type: ALERT_TYPE.WARNING,
-        title: 'ملاحظة',
-        textBody: 'يجب الموافقة على الشروط والخصوصية!',
-      });
-      return;
-    }
-    
-    await signUp(phoneNumber, firstName, lastName, password, expoToken);
+  const handleSignup = () => {
+    // Signup logic will be implemented later
+    console.log('Driver Signup pressed');
   };
 
-  const isLoading = isLogin ? isLoginLoading : isSignupLoading;
 
   return (
     <KeyboardAvoidingView 
@@ -102,11 +52,11 @@ export default function HomeScreen() {
       >
         {/* User/Driver Switcher */}
         <TouchableOpacity
-          style={styles.switcherButtonRight}
-          onPress={() => router.push('/driverLogin')}
+          style={styles.switcherButtonLeft}
+          onPress={() => router.back()}
         >
-          <Text style={styles.switcherText}>الدخول كسائق</Text>
-          <Ionicons name="arrow-forward-outline" size={18} color="#fff" style={styles.switcherIcon} />
+          <Ionicons name="arrow-back-outline" size={18} color="#fff" style={styles.switcherIcon} />
+          <Text style={styles.switcherText}>الدخول كمستخدم</Text>
         </TouchableOpacity>
 
         {/* Logo */}
@@ -125,8 +75,8 @@ export default function HomeScreen() {
           </Text>
           <Text style={styles.subtitle}>
             {isLogin 
-              ? 'التطبيق الاول في ليبيا المخصص للساحبات' 
-              : 'مرحبتين اطلب ساحبة بسهولة'}
+              ? 'أهلاً🚛 وصل خدمتك للناس' 
+              : 'مرحبتين👋 اطلب ساحبة بسهولة'}
           </Text>
         </View>
 
@@ -179,8 +129,6 @@ export default function HomeScreen() {
                   />
                 </View>
               </View>
-
-              {/* Birth Date */}
             </>
           )}
 
@@ -189,7 +137,7 @@ export default function HomeScreen() {
             <Text style={styles.label}>رقم الهاتف</Text>
             <TextInput
               style={styles.input}
-              placeholder="09XXXXXXXX"
+              placeholder="+218-920000000"
               placeholderTextColor="#B7B7B7"
               value={phoneNumber}
               onChangeText={setPhoneNumber}
@@ -197,6 +145,26 @@ export default function HomeScreen() {
               textAlign="right"
             />
           </View>
+
+          {!isLogin && (
+            <>
+              {/* Birth Date */}
+              <View style={styles.inputContainer}>
+                <Text style={styles.label}>تاريخ الميلاد</Text>
+                <View style={styles.dateInputContainer}>
+                  <Ionicons name="calendar-outline" size={24} color="#B7B7B7" style={styles.dateIcon} />
+                  <TextInput
+                    style={styles.input}
+                    placeholder="27/07/1998"
+                    placeholderTextColor="#B7B7B7"
+                    value={birthDate}
+                    onChangeText={setBirthDate}
+                    textAlign="right"
+                  />
+                </View>
+              </View>
+            </>
+          )}
 
           {/* Password */}
           <View style={styles.inputContainer}>
@@ -284,19 +252,13 @@ export default function HomeScreen() {
 
           {/* Submit Button */}
           <TouchableOpacity 
-            style={[styles.submitButton, isLoading && styles.submitButtonDisabled]}
+            style={styles.submitButton}
             onPress={isLogin ? handleLogin : handleSignup}
-            disabled={isLoading}
           >
-            {isLoading ? (
-              <ActivityIndicator color="#fff" />
-            ) : (
-              <Text style={styles.submitButtonText}>
-                {isLogin ? 'تسجيل الدخول' : 'إنشاء حساب'}
-              </Text>
-            )}
+            <Text style={styles.submitButtonText}>
+              {isLogin ? 'تسجيل الدخول' : 'إنشاء حساب'}
+            </Text>
           </TouchableOpacity>
-
         </View>
       </ScrollView>
     </KeyboardAvoidingView>

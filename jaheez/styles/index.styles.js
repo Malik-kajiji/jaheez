@@ -1,0 +1,256 @@
+import { StyleSheet, I18nManager, Platform } from "react-native";
+import { COLORS, FONT, SIZES, DIMENSIONS } from '../constants/constants';
+
+// Enable RTL for text only
+I18nManager.allowRTL(false);
+I18nManager.forceRTL(false);
+
+export const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: '#FFF5F3',
+    },
+    scrollContent: {
+        flexGrow: 1,
+        paddingHorizontal: 20,
+        paddingTop: 60,
+        paddingBottom: 40,
+    },
+    switcherButtonHolder: {
+        // backgroundColor: 'red',
+        width: '100%',
+        height: 60
+    },
+    switcherButtonRight: {
+        position: 'absolute',
+        top: 60,
+        right: 20,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: COLORS.primary,
+        paddingVertical: 10,
+        paddingHorizontal: 16,
+        borderRadius: 25,
+        shadowColor: COLORS.primary,
+        shadowOffset: {
+            width: 0,
+            height: 4,
+        },
+        shadowOpacity: 0.3,
+        shadowRadius: 8,
+        elevation: 5,
+        zIndex: 10,
+    },
+    switcherButtonLeft: {
+        position: 'absolute',
+        top: 60,
+        left: 20,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: COLORS.primary,
+        paddingVertical: 10,
+        paddingHorizontal: 16,
+        borderRadius: 25,
+        shadowColor: COLORS.primary,
+        shadowOffset: {
+            width: 0,
+            height: 4,
+        },
+        shadowOpacity: 0.3,
+        shadowRadius: 8,
+        elevation: 5,
+        zIndex: 10,
+    },
+    switcherText: {
+        fontSize: 13,
+        fontFamily: FONT.GE_SS_Bold,
+        color: '#fff',
+    },
+    switcherIcon: {
+        marginHorizontal: 4,
+    },
+    logoContainer: {
+        alignItems: 'center',
+        marginBottom: 30,
+    },
+    logoImage: {
+        marginTop:60,
+        width: 100,
+        height: 100,
+    },
+    titleContainer: {
+        alignItems: 'center',
+        marginBottom: 40,
+    },
+    title: {
+        fontSize: 32,
+        fontFamily: FONT.GE_SS_Bold,
+        color: COLORS.DarkTextColor,
+        textAlign: 'center',
+        marginBottom: 8,
+    },
+    subtitle: {
+        // backgroundColor:'red',
+        marginTop:4,
+        height:40,
+        fontSize: 16,
+        fontFamily: FONT.GE_SS_Medium,
+        color: COLORS.LightTextColor,
+        textAlign: 'center',
+    },
+    tabContainer: {
+        flexDirection: 'row',
+        backgroundColor: '#F5F6FA',
+        borderRadius: 12,
+        padding: 4,
+        marginBottom: 40,
+    },
+    tab: {
+        flex: 1,
+        paddingVertical: 12,
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: 8,
+    },
+    activeTab: {
+        backgroundColor: '#fff',
+    },
+    tabText: {
+        fontSize: 16,
+        fontFamily: FONT.GE_SS_Medium,
+        color: COLORS.LightTextColor,
+    },
+    activeTabText: {
+        color: COLORS.DarkTextColor,
+        fontFamily: FONT.GE_SS_Bold,
+    },
+    formContainer: {
+        width: '100%',
+    },
+    nameRow: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginBottom: 20,
+    },
+    nameField: {
+        flex: 1,
+        marginHorizontal: 4,
+    },
+    inputContainer: {
+        marginBottom: 20,
+    },
+    label: {
+        fontSize: 16,
+        fontFamily: FONT.GE_SS_Medium,
+        color: COLORS.DarkTextColor,
+        marginBottom: 8,
+        textAlign: 'right',
+    },
+    input: {
+        backgroundColor: '#fff',
+        borderRadius: 12,
+        paddingHorizontal: 16,
+        paddingVertical: 14,
+        fontSize: 16,
+        fontFamily: FONT.Montserrat_Regular,
+        color: COLORS.DarkTextColor,
+        borderWidth: 1,
+        borderColor: '#F5F6FA',
+        textAlign: 'right',
+    },
+    dateInputContainer: {
+        position: 'relative',
+    },
+    dateIcon: {
+        position: 'absolute',
+        left: 16,
+        top: 14,
+        zIndex: 1,
+    },
+    passwordContainer: {
+        position: 'relative',
+    },
+    passwordInput: {
+        backgroundColor: '#fff',
+        borderRadius: 12,
+        paddingHorizontal: 16,
+        paddingVertical: 14,
+        paddingLeft: 50,
+        fontSize: 16,
+        fontFamily: FONT.Montserrat_Regular,
+        color: COLORS.DarkTextColor,
+        borderWidth: 1,
+        borderColor: '#F5F6FA',
+        textAlign: 'right',
+    },
+    eyeIcon: {
+        position: 'absolute',
+        left: 16,
+        top: 14,
+        zIndex: 1,
+    },
+    checkboxContainer: {
+        flexDirection: 'row-reverse',
+        alignItems: 'center',
+        marginBottom: 20,
+        justifyContent: 'flex-start',
+        // backgroundColor:'yellow',
+    },
+    checkbox: {
+        width: 20,
+        height: 20,
+        borderRadius: 4,
+        borderWidth: 2,
+        borderColor: '#E0E0E0',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginLeft: 8,
+    },
+    checkboxChecked: {
+        backgroundColor: COLORS.primary,
+        borderColor: COLORS.primary,
+    },
+    checkboxText: {
+        fontSize: 14,
+        fontFamily: FONT.GE_SS_Medium,
+        color: COLORS.NormalTextColor,
+    },
+    loginOptionsContainer: {
+        flexDirection: 'row-reverse',
+        justifyContent: 'space-between',
+        // backgroundColor:'red',
+        // alignItems: 'center',
+        marginBottom: 20,
+    },
+    forgotPassword: {
+        fontSize: 14,
+        fontFamily: FONT.GE_SS_Medium,
+        color: COLORS.primary,
+    },
+    submitButton: {
+        backgroundColor: COLORS.primary,
+        borderRadius: 12,
+        paddingVertical: 16,
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginBottom: 20,
+        shadowColor: COLORS.primary,
+        shadowOffset: {
+            width: 0,
+            height: 4,
+        },
+        shadowOpacity: 0.3,
+        shadowRadius: 8,
+        elevation: 8,
+    },
+    submitButtonDisabled: {
+        opacity: 0.6,
+    },
+    submitButtonText: {
+        fontSize: 18,
+        fontFamily: FONT.GE_SS_Bold,
+        color: '#fff',
+    },
+});
