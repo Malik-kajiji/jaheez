@@ -40,8 +40,15 @@ const userSchema = new schema({
     otpCode: {
         type: String,
     },
+    resetOtpCode: {
+        type: String,
+    },
     expoToken: {
         type: String,
+    },
+    tokenVersion: {
+        type: Number,
+        default: 0,
     }
 },  { timestamps: true })
 
@@ -101,5 +108,62 @@ userSchema.statics.verifyUser = async function(userId,OTPCode) {
     }
 
 }
+
+userSchema.statics.createOtpResetCode = async function(phoneNumber) {
+    const user = await this.findOne({phoneNumber})
+    if(!user){
+        throw Error('رقم الهاتف غير موجود')
+    }
+    const newOtpCode = generateRandomCode()
+    await this.findOneAndUpdate({phoneNumber},{resetOtpCode:newOtpCode})
+
+    return newOtpCode
+}
+
+userSchema.statics.getResetOtpCode = async function(phoneNumber) {
+    const user = await this.findOne({phoneNumber})
+    if(!user){
+        throw Error('رقم الهاتف غير موجود')
+    }
+    const otpResetCode = user.resetOtpCode;
+    if(!otpResetCode){
+        throw Error('لا يوجد رمز لإعادة التعيين. الرجاء طلب رمز جديد.')
+    }
+    return otpResetCode
+}
+
+userSchema.statics.checkResetCode = async function(phoneNumber,resetOtpCode) {
+    const user = await this.findOne({phoneNumber})
+    if(!user){
+        throw Error('رقم الهاتف غير موجود')
+    }
+    if(resetOtpCode == user.resetOtpCode){
+        return true
+    }else {
+        throw Error('رمز otp خاطئ')
+    }
+}
+
+userSchema.statics.resetPassword = async function(phoneNumber,resetOtpCode,newPassword) {
+    const user = await this.findOne({phoneNumber})
+    if(!user){
+        throw Error('رقم الهاتف غير موجود')
+    }
+    if(resetOtpCode != user.resetOtpCode){
+        throw Error('رمز otp خاطئ')
+    }
+    const salt = await bcrypt.genSalt(10);
+    const hash = await bcrypt.hash(newPassword,salt);
+    const nextTokenVersion = (user.tokenVersion || 0) + 1;
+
+    await this.findOneAndUpdate({ phoneNumber }, {
+        password: hash,
+        resetOtpCode: null,
+        tokenVersion: nextTokenVersion,
+    })
+
+    return true
+}
+
 
 module.exports = mongoose.model('user',userSchema)

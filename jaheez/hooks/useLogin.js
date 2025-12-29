@@ -17,6 +17,18 @@ const useLogin = () => {
 
     const { logOut,login,verifyUser } = userActions
 
+    const handleUnauthorized = async (msg = 'انتهت الجلسة، يرجى تسجيل الدخول مجددًا') => {
+        await AsyncStorage.removeItem('token')
+        await AsyncStorage.removeItem('expoToken')
+        dispatch(logOut())
+        Toast.show({
+            type: ALERT_TYPE.DANGER,
+            title: 'تم تسجيل الخروج',
+            textBody: msg,
+        })
+        router.replace('/')
+    }
+
     const loginAsUser = async (phoneNumber,password,expoToken) => {
         setIsLoginLoading(true)
         if((phoneNumber.length < 10 || !phoneNumber.startsWith('09'))){
@@ -75,7 +87,6 @@ const useLogin = () => {
             setIsLoginLoading(false)
         }
     }
-
 
     const signUp = async (phoneNumber,firstName,lastName,password,expoToken) => {
         setIsSignUpLoading(true)
@@ -172,6 +183,10 @@ const useLogin = () => {
                 })
 
                 const json = await res.json()
+                if(res.status === 401){
+                    await handleUnauthorized(json?.error || json?.message)
+                    return
+                }
                 if(!res.ok){
                     throw Error(json.message)
                 }
@@ -214,6 +229,10 @@ const useLogin = () => {
                 }
             })
             const json = await res.json()
+            if(res.status === 401){
+                await handleUnauthorized(json?.error || json?.message)
+                return
+            }
             const {
                 username,
                 phoneNumber,
@@ -233,38 +252,11 @@ const useLogin = () => {
         }
     }
     
-    const handleResendMessage = async () => {
-        try {
-            const res = await fetch(`${BACKEND_URL}/user/resend-message`,{
-                method:'POST',
-                headers: {
-                    'Content-Type':'application/json',
-                    'authorization': `bearer ${user?.token}`
-                },
-            })
-
-            const json = await res.json()
-            if(!res.ok){
-                throw Error(json.message)
-            }
-            Toast.show({
-                type: ALERT_TYPE.SUCCESS,
-                title: 'تم الإرسال',
-                textBody: json.message,
-            })
-        }catch(err){
-            Toast.show({
-                type: ALERT_TYPE.DANGER,
-                title: 'خطأ',
-                textBody: err.message,
-            })
-        }
-    }
 
     const handleSendResetMessage = async (phoneNumber) => {
         setIsResetLoading(true)
         try {
-            const res = await fetch(`${BACKEND_URL}/user/send-reset-message`,{
+            const res = await fetch(`${BACKEND_URL}/api/user/send-reset-message`,{
                 method:'POST',
                 headers: {
                     'Content-Type':'application/json',
@@ -273,6 +265,44 @@ const useLogin = () => {
             })
 
             const json = await res.json()
+            setIsResetLoading(false)
+            if(!res.ok){
+                throw Error(json.message)
+            }
+
+            Toast.show({
+                type: ALERT_TYPE.SUCCESS,
+                title: 'تم الإرسال',
+                textBody: json.message,
+            })
+            return true
+        }catch(err){
+            Toast.show({
+                type: ALERT_TYPE.DANGER,
+                title: 'خطأ',
+                textBody: err.message,
+            })
+            return false
+        }
+        
+    }
+
+    const handleResendMessage = async (phoneNumber) => {
+        try {
+            const res = await fetch(`${BACKEND_URL}/api/user/resend-message`,{
+                method:'POST',
+                headers: {
+                    'Content-Type':'application/json',
+                    'authorization': `bearer ${user?.token}`
+                },
+                body:JSON.stringify({phoneNumber})
+            })
+
+            const json = await res.json()
+            if(res.status === 401){
+                await handleUnauthorized(json?.error || json?.message)
+                return false
+            }
             if(!res.ok){
                 throw Error(json.message)
             }
@@ -281,6 +311,54 @@ const useLogin = () => {
                 title: 'تم الإرسال',
                 textBody: json.message,
             })
+            return true
+        }catch(err){
+            Toast.show({
+                type: ALERT_TYPE.DANGER,
+                title: 'خطأ',
+                textBody: err.message,
+            })
+            return false
+        }
+    }
+
+    const handleCheckResetCode = async (phoneNumber,OTPCode) => {
+        try {
+            const res = await fetch(`${BACKEND_URL}/api/user/check-reset-code`,{
+                method:'POST',
+                headers: {
+                    'Content-Type':'application/json',
+                    'authorization': `bearer ${user?.token}`
+                },
+                body:JSON.stringify({phoneNumber,OTPCode})
+            })
+
+            const json = await res.json()
+            if(res.status === 401){
+                await handleUnauthorized(json?.error || json?.message)
+                return false
+            }
+            if(!res.ok){
+                throw Error(json.message)
+            }
+
+            if(json.valid){
+                Toast.show({
+                    type: ALERT_TYPE.SUCCESS,
+                    title: 'الكود صحيح',
+                    textBody: json.message,
+                })
+                return true
+            }else {
+                Toast.show({
+                    type: ALERT_TYPE.DANGER,
+                    title: 'خطأ',
+                    textBody: 'الكود غير صحيح',
+                })
+                return false
+            }
+
+            
         }catch(err){
             Toast.show({
                 type: ALERT_TYPE.DANGER,
@@ -288,18 +366,17 @@ const useLogin = () => {
                 textBody: err.message,
             })
         }
-        setIsResetLoading(false)
     }
 
-    const handleResetPassword = async (code,newPassword,setIsShowen) => {
+    const handleResetPassword = async (phoneNumber,resetOtpCode,newPassword) => {
         setIsResetLoading(true)
         try {
-            const res = await fetch(`${BACKEND_URL}/user/reset-password`,{
+            const res = await fetch(`${BACKEND_URL}/api/user/reset-password`,{
                 method:'POST',
                 headers: {
                     'Content-Type':'application/json',
                 },
-                body:JSON.stringify({code,newPassword})
+                body:JSON.stringify({phoneNumber,resetOtpCode,newPassword})
             })
 
             const json = await res.json()
@@ -311,7 +388,13 @@ const useLogin = () => {
                 title: 'تمت العملية بنجاح!',
                 textBody: 'يمكنك الان تسجيل الدخول بكلمة المرور الجديدة بنجاح',
             })
-            setIsShowen(false)
+
+            // expire token locally so user is logged out on all sessions
+            await AsyncStorage.removeItem('token')
+            await AsyncStorage.removeItem('expoToken')
+            dispatch(logOut())
+            router.replace('/')
+            
         }catch(err){
             Toast.show({
                 type: ALERT_TYPE.DANGER,
@@ -322,7 +405,7 @@ const useLogin = () => {
         setIsResetLoading(false)
     }
 
-    return {loginAsUser,signUp,verifyUserByCode,handleLogOut,getUserData,handleResendMessage,isSignupLoading,isLoginLoading,handleSendResetMessage,handleResetPassword,isResetLoading,error}
+    return {loginAsUser,signUp,verifyUserByCode,handleLogOut,getUserData,handleResendMessage,isSignupLoading,isLoginLoading,handleSendResetMessage,handleResetPassword,handleCheckResetCode,isResetLoading,error}
 }
 
 export default useLogin

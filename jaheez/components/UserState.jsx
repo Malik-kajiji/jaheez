@@ -17,11 +17,13 @@ const UserState = () => {
             if(res){
                 getData(res);
             }
-        });
+        }).catch(err => {
+            console.log(err.message);
+        })
 
         const getData = async (token) => {
             try {
-                const res = await fetch(`${BACKEND_URL}/user/get-user-data`,{
+                const res = await fetch(`${BACKEND_URL}/api/user/get-data`,{
                     method:'GET',
                     headers: {
                         'Content-Type':'application/json',
@@ -52,7 +54,7 @@ const UserState = () => {
                 // Redirect to user home if not already there
                 const inAuthGroup = segments[0] === '(user)';
                 if (!inAuthGroup) {
-                    router.replace('/(user)');
+                    router.replace('/(user)/home');
                 }
             }catch(err){
                 console.log(err.message);
