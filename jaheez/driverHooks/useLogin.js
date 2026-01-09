@@ -1,21 +1,22 @@
 import { useDispatch, useSelector } from 'react-redux'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { ALERT_TYPE, Toast, Dialog } from 'react-native-alert-notification'
-import { userActions } from '../redux/userState'
+import { driverActions } from '../redux/driverState'
 import { useState } from 'react'
 import { useRouter } from 'expo-router'
 
 const useLogin = () => {
     const dispatch = useDispatch()
     const router = useRouter()
-    const user = useSelector(state => state.userController.user)
+    const driver = useSelector(state => state.driverController.driver)
     const BACKEND_URL = process.env.EXPO_PUBLIC_BACKEND_URL;
     const [isSignupLoading,setIsSignUpLoading] = useState(false)
     const [isLoginLoading,setIsLoginLoading] = useState(false)
     const [isResetLoading,setIsResetLoading] = useState(false)
     const [error,setError] = useState(null)
+    const [isVerificationLoading,setIsVerificationLoading] = useState(false)
 
-    const { logOut,login,verifyUser } = userActions
+    const { logOut,login,verifydriver } = driverActions
 
     const handleUnauthorized = async (msg = 'انتهت الجلسة، يرجى تسجيل الدخول مجددًا') => {
         await AsyncStorage.removeItem('loginInfo')
@@ -29,7 +30,7 @@ const useLogin = () => {
         router.replace('/')
     }
 
-    const loginAsUser = async (phoneNumber,password,expoToken) => {
+    const loginAsDriver = async (phoneNumber,password,expoToken) => {
         setIsLoginLoading(true)
         if((phoneNumber.length < 10 || !phoneNumber.startsWith('09'))){
             setError('الرجاء إدخال رقم صالح!')
@@ -49,7 +50,7 @@ const useLogin = () => {
             setIsLoginLoading(false)
         }else {
             try {
-                const res = await fetch(`${BACKEND_URL}/api/user/login`,{
+                const res = await fetch(`${BACKEND_URL}/api/driver/login`,{
                     method:'POST',
                     headers: {
                         'Content-Type':'application/json'
@@ -63,12 +64,14 @@ const useLogin = () => {
                     throw Error(json.message)
                 }
 
-                const { username,phoneNumber:userPhone,numberOfTrips,warrnings,isBanned,isVerified,token } = json
-                await AsyncStorage.setItem('loginInfo', JSON.stringify({ userType: 'user', token }))
+                const { driverName,phoneNumber:driverPhone,state,carPlate,carImage,ratings,vechicleType,vechicleModel,numberOfTrips,balance,warrnings,isBanned,isVerified,verificationStatus,verificationReason,token } = json
+                await AsyncStorage.setItem('loginInfo', JSON.stringify({ userType: 'driver', token }))
                 if(expoToken) {
                     await AsyncStorage.setItem('expoToken',expoToken)
                 }
-                dispatch(login({username,phoneNumber:userPhone,numberOfTrips,warrnings,isBanned,isVerified,token}))
+
+               
+                dispatch(login({driverName,phoneNumber:driverPhone,state,carPlate,carImage,ratings,vechicleType,vechicleModel,numberOfTrips,balance,warrnings,isBanned,isVerified,verificationStatus,verificationReason,token}))
                 
                 Toast.show({
                     type: ALERT_TYPE.SUCCESS,
@@ -76,7 +79,7 @@ const useLogin = () => {
                     textBody: 'تم تسجيل الدخول بنجاح',
                 })
                 
-                router.replace('/(user)/home')
+                router.replace('/(driver)/home')
             }catch(err){
                 Toast.show({
                     type: ALERT_TYPE.DANGER,
@@ -124,12 +127,12 @@ const useLogin = () => {
             setIsSignUpLoading(false)
         }else {
             try {
-                const res = await fetch(`${BACKEND_URL}/api/user/signup`,{
+                const res = await fetch(`${BACKEND_URL}/api/driver/signup`,{
                     method:'POST',
                     headers: {
                         'Content-Type':'application/json'
                     },
-                    body:JSON.stringify({firstName,lastName,phoneNumber,password,expoToken})
+                    body:JSON.stringify({driverName:`${firstName} ${lastName}`,phoneNumber,password,expoToken})
                 })
 
                 const json = await res.json()
@@ -139,13 +142,13 @@ const useLogin = () => {
                     throw Error(json.message)
                 }
                 
-                const { username,phoneNumber:userPhone,numberOfTrips,warrnings,isBanned,isVerified,token } = json
-                await AsyncStorage.setItem('loginInfo', JSON.stringify({ userType: 'user', token }))
+                const { driverName,phoneNumber:driverPhone,state,carPlate,carImage,ratings,vechicleType,vechicleModel,numberOfTrips,balance,warrnings,isBanned,isVerified,verificationStatus,verificationReason,token } = json
+                await AsyncStorage.setItem('loginInfo', JSON.stringify({ userType: 'driver', token }))
                 
                 if(expoToken) {
                     await AsyncStorage.setItem('expoToken',expoToken)
                 }
-                dispatch(login({username,phoneNumber:userPhone,numberOfTrips,warrnings,isBanned,isVerified,token}))
+                dispatch(login({driverName,phoneNumber:driverPhone,state,carPlate,carImage,ratings,vechicleType,vechicleModel,numberOfTrips,balance,warrnings,isBanned,isVerified,verificationStatus,verificationReason,token}))
                 
                 Toast.show({
                     type: ALERT_TYPE.SUCCESS,
@@ -153,7 +156,7 @@ const useLogin = () => {
                     textBody: 'تم إنشاء الحساب بنجاح',
                 })
                 
-                router.replace('/(user)/home')
+                router.replace('/(driver)/home')
             }catch(err){
                 Toast.show({
                     type: ALERT_TYPE.DANGER,
@@ -165,7 +168,7 @@ const useLogin = () => {
         }
     }
     
-    const verifyUserByCode = async (OTPCode,setIsShowen) => {
+    const verifyDriverByCode = async (OTPCode,setIsShowen) => {
         if(OTPCode.length < 4){
             Toast.show({
                 type: ALERT_TYPE.WARNING,
@@ -174,11 +177,11 @@ const useLogin = () => {
             })
         }else {
             try {
-                const res = await fetch(`${BACKEND_URL}/api/user/verify-user`,{
+                const res = await fetch(`${BACKEND_URL}/api/driver/verify-driver`,{
                     method:'PUT',
                     headers: {
                         'Content-Type':'application/json',
-                        'authorization': `bearer ${user?.token}`
+                        'authorization': `bearer ${driver?.token}`
                     },
                     body:JSON.stringify({OTPCode})
                 })
@@ -191,7 +194,7 @@ const useLogin = () => {
                 if(!res.ok){
                     throw Error(json.message)
                 }
-                dispatch(verifyUser())
+                dispatch(verifydriver())
                 setIsShowen(false)
                 Toast.show({
                     type: ALERT_TYPE.SUCCESS,
@@ -202,6 +205,7 @@ const useLogin = () => {
                 Toast.show({
                     type: ALERT_TYPE.DANGER,
                     title: 'خطأ',
+                    // textBody: 'كود التحقق غير صحيح',
                     textBody: err.message,
                 })
             }
@@ -219,7 +223,7 @@ const useLogin = () => {
         }
     }
     
-    const getUserData = async () => {
+    const getDriverData = async () => {
         try {
             const loginInfo = await AsyncStorage.getItem('loginInfo')
             const parsedLoginInfo = JSON.parse(loginInfo);
@@ -228,7 +232,7 @@ const useLogin = () => {
                 throw new Error('No token found in storage');
             }
 
-            const res = await fetch(`${BACKEND_URL}/api/user/get-data`,{
+            const res = await fetch(`${BACKEND_URL}/api/driver/get-data`,{
                 method:'GET',
                 headers: {
                     'Content-Type':'application/json',
@@ -241,15 +245,24 @@ const useLogin = () => {
                 return
             }
             const {
-                username,
+                driverName,
                 phoneNumber,
+                state,
+                carPlate,
+                carImage,
+                ratings,
+                vechicleType,
+                vechicleModel,
                 numberOfTrips,
+                balance,
                 warrnings,
                 isBanned,
-                isVerified
+                isVerified,
+                verificationStatus,
+                verificationReason
             } = json
 
-            dispatch(login({username,phoneNumber,numberOfTrips,warrnings,isBanned,isVerified,token:storageToken}))
+            dispatch(login({driverName,phoneNumber,state,carPlate,carImage,ratings,vechicleType,vechicleModel,numberOfTrips,balance,warrnings,isBanned,isVerified,verificationStatus,verificationReason,token:storageToken}))
         }catch(err){
             Toast.show({
                 type: ALERT_TYPE.DANGER,
@@ -263,7 +276,7 @@ const useLogin = () => {
     const handleSendResetMessage = async (phoneNumber) => {
         setIsResetLoading(true)
         try {
-            const res = await fetch(`${BACKEND_URL}/api/user/send-reset-message`,{
+            const res = await fetch(`${BACKEND_URL}/api/driver/send-reset-message`,{
                 method:'POST',
                 headers: {
                     'Content-Type':'application/json',
@@ -296,7 +309,7 @@ const useLogin = () => {
 
     const handleResendMessage = async (phoneNumber) => {
         try {
-            const res = await fetch(`${BACKEND_URL}/api/user/resend-message`,{
+            const res = await fetch(`${BACKEND_URL}/api/driver/resend-message`,{
                 method:'POST',
                 headers: {
                     'Content-Type':'application/json',
@@ -326,11 +339,11 @@ const useLogin = () => {
 
     const handleCheckResetCode = async (phoneNumber,OTPCode) => {
         try {
-            const res = await fetch(`${BACKEND_URL}/api/user/check-reset-code`,{
+            const res = await fetch(`${BACKEND_URL}/api/driver/check-reset-code`,{
                 method:'POST',
                 headers: {
                     'Content-Type':'application/json',
-                    'authorization': `bearer ${user?.token}`
+                    'authorization': `bearer ${driver?.token}`
                 },
                 body:JSON.stringify({phoneNumber,OTPCode})
             })
@@ -373,7 +386,7 @@ const useLogin = () => {
     const handleResetPassword = async (phoneNumber,resetOtpCode,newPassword) => {
         setIsResetLoading(true)
         try {
-            const res = await fetch(`${BACKEND_URL}/api/user/reset-password`,{
+            const res = await fetch(`${BACKEND_URL}/api/driver/reset-password`,{
                 method:'POST',
                 headers: {
                     'Content-Type':'application/json',
@@ -407,7 +420,92 @@ const useLogin = () => {
         setIsResetLoading(false)
     }
 
-    return {loginAsUser,signUp,verifyUserByCode,handleLogOut,getUserData,handleResendMessage,isSignupLoading,isLoginLoading,handleSendResetMessage,handleResetPassword,handleCheckResetCode,isResetLoading,error}
+    const submitDriverVerification = async ({carPlate,carImageBase64,vechicleType,vechicleModel}) => {
+        if(!carPlate || !carImageBase64 || !vechicleType || !vechicleModel){
+            Toast.show({
+                type: ALERT_TYPE.WARNING,
+                title: 'ملاحظة',
+                textBody: 'الرجاء تعبئة جميع الحقول وإرفاق صورة المركبة',
+            })
+            return false
+        }
+
+        setIsVerificationLoading(true)
+        try {
+            const res = await fetch(`${BACKEND_URL}/api/driver/submit-verification`,{
+                method:'POST',
+                headers: {
+                    'Content-Type':'application/json',
+                    'authorization': `bearer ${driver?.token}`
+                },
+                body:JSON.stringify({carPlate,carImage:carImageBase64,vechicleType,vechicleModel})
+            })
+
+            const json = await res.json()
+            if(res.status === 401){
+                await handleUnauthorized(json?.error || json?.message)
+                return false
+            }
+            if(!res.ok){
+                throw Error(json.message)
+            }
+
+                const {
+                    driverName = driver?.driverName,
+                    phoneNumber = driver?.phoneNumber,
+                    state = driver?.state,
+                    carPlate: updatedPlate,
+                    carImage,
+                    ratings = driver?.ratings,
+                    vechicleType: updatedType,
+                    vechicleModel: updatedModel,
+                    numberOfTrips = driver?.numberOfTrips,
+                    balance = driver?.balance,
+                    warrnings = driver?.warrnings,
+                    isBanned = driver?.isBanned,
+                    isVerified = driver?.isVerified,
+                    verificationStatus = driver?.verificationStatus,
+                    verificationReason = driver?.verificationReason,
+                } = json?.driver || {}
+
+                dispatch(login({
+                    driverName,
+                    phoneNumber,
+                    state,
+                    carPlate: updatedPlate,
+                    carImage,
+                    ratings,
+                    vechicleType: updatedType,
+                    vechicleModel: updatedModel,
+                    numberOfTrips,
+                    balance,
+                    warrnings,
+                    isBanned,
+                    isVerified,
+                    verificationStatus,
+                    verificationReason,
+                    token: driver?.token
+                }))
+
+            Toast.show({
+                type: ALERT_TYPE.SUCCESS,
+                title: 'تم الإرسال',
+                textBody: json?.message || 'تم إرسال طلب التوثيق بنجاح',
+            })
+            return true
+        }catch(err){
+            Toast.show({
+                type: ALERT_TYPE.DANGER,
+                title: 'خطأ',
+                textBody: err.message,
+            })
+            return false
+        }finally{
+            setIsVerificationLoading(false)
+        }
+    }
+
+    return {loginAsDriver,signUp,verifyDriverByCode,handleLogOut,getDriverData,handleResendMessage,isSignupLoading,isLoginLoading,handleSendResetMessage,handleResetPassword,handleCheckResetCode,isResetLoading,error,submitDriverVerification,isVerificationLoading}
 }
 
 export default useLogin

@@ -276,7 +276,7 @@ export default function HomeScreen() {
                 </View>
                 <Text style={styles.checkboxText}>تذكرني</Text>
               </TouchableOpacity>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={() => router.push('/(user)/resetPassword')}>
                 <Text style={styles.forgotPassword}>نسيت كلمة المرور؟</Text>
               </TouchableOpacity>
             </View>

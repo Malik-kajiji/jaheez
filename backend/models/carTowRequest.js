@@ -69,11 +69,15 @@ carTowRequestSchema.statics.approveRequest = async function(requestId) {
     request.state = 'approved';
     await request.save();
     
-    // Update driver state to active
+    // Update driver profile and verification status
     await mongoose.model('carTow').findByIdAndUpdate(request.driverId, {
         state: 'active',
         carPlate: request.carPlate,
-        carImage: request.carImage
+        carImage: request.carImage,
+        vechicleType: request.vechicleType,
+        vechicleModel: request.vechicleModel,
+        verificationStatus: 'approved',
+        verificationReason: ''
     });
     
     return request;
@@ -89,6 +93,12 @@ carTowRequestSchema.statics.rejectRequest = async function(requestId, reasonForR
     request.state = 'rejected';
     request.reasonForRejection = reasonForRejection;
     await request.save();
+
+    // Update driver verification status
+    await mongoose.model('carTow').findByIdAndUpdate(request.driverId, {
+        verificationStatus: 'rejected',
+        verificationReason: reasonForRejection
+    });
     
     return request;
 };

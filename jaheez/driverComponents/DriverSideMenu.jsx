@@ -3,11 +3,11 @@ import { Animated, DeviceEventEmitter, StyleSheet, Text, TouchableOpacity, View 
 import { FontAwesome5 } from '@expo/vector-icons';
 import { usePathname, useRouter } from 'expo-router';
 import { COLORS, FONT, SIZES } from '../constants/constants';
-import useLogin from '../hooks/useLogin';
+import useLogin from '../driverHooks/useLogin';
 
 const MENU_WIDTH = 260;
 
-const SideMenu = () => {
+const DriverSideMenu = () => {
   const router = useRouter();
   const pathname = usePathname();
   const { handleLogOut } = useLogin();
@@ -45,8 +45,8 @@ const SideMenu = () => {
   }, [isOpen, openMenu, closeMenu]);
 
   useEffect(() => {
-    const subToggle = DeviceEventEmitter.addListener('userMenu:toggle', toggleMenu);
-    const subClose = DeviceEventEmitter.addListener('userMenu:close', closeMenu);
+    const subToggle = DeviceEventEmitter.addListener('driverMenu:toggle', toggleMenu);
+    const subClose = DeviceEventEmitter.addListener('driverMenu:close', closeMenu);
     return () => {
       subToggle.remove();
       subClose.remove();
@@ -55,40 +55,37 @@ const SideMenu = () => {
 
   const navigateTo = useCallback((target) => {
     const go = () => {
-        const fullPathname = '/(user)'+ pathname;
-      const homePath = '/(user)/home';
+      const fullPathname = '/(driver)' + pathname;
+      const homePath = '/(driver)/home';
 
-      // If already on the target, do nothing beyond closing the menu
       if (fullPathname === target) {
         return;
-      }else {
-          if (target === homePath) {
-              router.back();
-            return;
-          }else {
-            if (fullPathname === homePath) {
-                router.push(target);
-            } else {
-                router.replace(target);
-            }
-          }
       }
 
+      if (target === homePath) {
+        router.back();
+        return;
+      }
+
+      if (fullPathname === homePath) {
+        router.push(target);
+      } else {
+        router.replace(target);
+      }
     };
-    setTimeout(go, 140);
+    setTimeout(go, 120);
   }, [pathname, router]);
 
-  // Always close drawer when route changes (e.g., coming back to home)
   useEffect(() => {
     closeMenu();
   }, [pathname, closeMenu]);
 
   const menuItems = useMemo(() => ([
-    { key: 'home', label: 'الرئيسية', icon: 'home', action: () => navigateTo('/(user)/home') },
-    { key: 'trips', label: 'رحلاتي', icon: 'route', action: () => navigateTo('/(user)/trips') },
-    { key: 'profile', label: 'حسابي', icon: 'user', action: () => navigateTo('/(user)/profile') },
-    { key: 'subscription', label: 'إدارة الاشتراك', icon: 'id-card', action: () => navigateTo('/(user)/subscriptionManagement') },
-    { key: 'report', label: 'إرسال بلاغ', icon: 'file-alt', action: () => navigateTo('/(user)/report') },
+    { key: 'home', label: 'الرئيسية', icon: 'home', action: () => navigateTo('/(driver)/home') },
+    { key: 'trips', label: 'رحلاتي', icon: 'route', action: () => navigateTo('/(driver)/trips') },
+    { key: 'profile', label: 'حسابي', icon: 'user', action: () => navigateTo('/(driver)/profile') },
+    { key: 'subscription', label: 'إدارة الاشتراك', icon: 'id-card', action: () => navigateTo('/(driver)/subscriptionManagement') },
+    { key: 'report', label: 'إرسال بلاغ', icon: 'file-alt', action: () => navigateTo('/(driver)/report') },
     { key: 'logout', label: 'تسجيل الخروج', icon: 'sign-out-alt', action: handleLogOut },
   ]), [navigateTo, handleLogOut]);
 
@@ -140,12 +137,6 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.bgColor,
     paddingTop: 60,
     paddingHorizontal: 18,
-    // borderTopRightRadius: 18,
-    // borderBottomRightRadius: 18,
-    // shadowColor: '#000',
-    // shadowOpacity: 0.12,
-    // shadowRadius: 12,
-    // elevation: 12,
     zIndex: 410,
     elevation: 410,
   },
@@ -182,4 +173,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SideMenu;
+export default DriverSideMenu;

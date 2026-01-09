@@ -3,18 +3,28 @@ const mongoose = require('mongoose');
 const schema = mongoose.Schema;
 
 const subscriptionSchema = new schema({
+    entityType: {
+        type: String,
+        enum: ['user', 'driver'],
+        default: 'user',
+    },
     userId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'user',
-        required: true
     },
     userName: {
         type: String,
-        required: true
     },
     userPhoneNumber: {
         type: String,
-        required: true
+    },
+    driverId: {
+        type: mongoose.Schema.Types.ObjectId,
+    },
+    driverName: {
+        type: String,
+    },
+    driverPhoneNumber: {
+        type: String,
     },
     packageId: {
         type: String,
@@ -43,7 +53,7 @@ const subscriptionSchema = new schema({
     },
     status: {
         type: String,
-        enum: ['active', 'expired', 'cancelled'],
+        enum: ['active', 'expired', 'cancelled', 'scheduled'],
         default: 'active',
         required: true
     },
@@ -51,23 +61,40 @@ const subscriptionSchema = new schema({
         type: Boolean,
         default: false
     },
-    paymentMethod: {
-        type: String,
-        enum: ['cash', 'card', 'voucher'],
-        default: 'cash'
-    }
 }, { timestamps: true });
 
 // Index for faster queries
 subscriptionSchema.index({ userId: 1, status: 1 });
+subscriptionSchema.index({ driverId: 1, status: 1 });
 subscriptionSchema.index({ endDate: 1 });
 
 // Static method to create a new subscription
 subscriptionSchema.statics.createSubscription = async function(subscriptionData) {
-    const { userId, userName, userPhoneNumber, packageId, packageName, packagePrice, packagePeriod, startDate } = subscriptionData;
+    const {
+        userId,
+        userName,
+        userPhoneNumber,
+        driverId,
+        driverName,
+        driverPhoneNumber,
+        packageId,
+        packageName,
+        packagePrice,
+        packagePeriod,
+        startDate,
+        entityType = driverId ? 'driver' : 'user',
+    } = subscriptionData;
     
-    if (!userId || !userName || !userPhoneNumber || !packageId || !packageName || !packagePrice || !packagePeriod) {
-        throw Error('جميع الحقول مطلوبة');
+    const isDriver = entityType === 'driver';
+    const hasDriverIdentity = driverId && driverName && driverPhoneNumber;
+    const hasUserIdentity = userId && userName && userPhoneNumber;
+
+    if (!hasDriverIdentity && !hasUserIdentity) {
+        throw Error('بيانات الهوية غير مكتملة للاشتراك');
+    }
+
+    if (!packageId || !packageName || !packagePrice || !packagePeriod) {
+        throw Error('جميع حقول الباقة مطلوبة');
     }
 
     if (packagePrice <= 0) {
@@ -84,9 +111,13 @@ subscriptionSchema.statics.createSubscription = async function(subscriptionData)
     end.setDate(end.getDate() + packagePeriod);
 
     const subscription = await this.create({
-        userId,
-        userName,
-        userPhoneNumber,
+        entityType: isDriver ? 'driver' : 'user',
+        userId: hasUserIdentity ? userId : undefined,
+        userName: hasUserIdentity ? userName : undefined,
+        userPhoneNumber: hasUserIdentity ? userPhoneNumber : undefined,
+        driverId: hasDriverIdentity ? driverId : undefined,
+        driverName: hasDriverIdentity ? driverName : undefined,
+        driverPhoneNumber: hasDriverIdentity ? driverPhoneNumber : undefined,
         packageId,
         packageName,
         packagePrice,

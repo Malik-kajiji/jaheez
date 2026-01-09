@@ -89,7 +89,7 @@ userSchema.statics.login = async function(phoneNumber,password,expoToken) {
         throw Error('كلمة مرور غير صحيحة')
     }
 
-    this.findOneAndUpdate({_id:user._id},{expoToken})
+    await this.findOneAndUpdate({_id:user._id},{expoToken})
     return user
 }
 

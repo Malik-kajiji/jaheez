@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -7,19 +7,26 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   Platform,
-  Image
+  Image,
+  ActivityIndicator
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { ALERT_TYPE, Toast } from 'react-native-alert-notification';
+import useLogin from '../driverHooks/useLogin';
 import { styles } from '../styles/index.styles';
+import { COLORS } from '../constants/constants';
 
 export default function DriverLoginScreen() {
   const router = useRouter();
+  const { loginAsDriver, signUp, isLoginLoading, isSignupLoading } = useLogin();
   const [isLogin, setIsLogin] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
   const [agreeToTerms, setAgreeToTerms] = useState(false);
+  const [expoToken, setExpoToken] = useState('');
 
   // Form states
   const [firstName, setFirstName] = useState('');
@@ -29,16 +36,56 @@ export default function DriverLoginScreen() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
 
-  const handleLogin = () => {
-    // Login logic will be implemented later
-    console.log('Driver Login pressed');
+  useEffect(() => {
+    AsyncStorage.getItem('expoToken').then((token) => {
+      if (token) setExpoToken(token);
+    });
+  }, []);
+
+  const handleLogin = async () => {
+    if (!phoneNumber || !password) {
+      Toast.show({
+        type: ALERT_TYPE.WARNING,
+        title: 'ملاحظة',
+        textBody: 'تأكد من ملئ الحقول!',
+      });
+      return;
+    }
+    await loginAsDriver(phoneNumber, password, expoToken);
   };
 
-  const handleSignup = () => {
-    // Signup logic will be implemented later
-    console.log('Driver Signup pressed');
+  const handleSignup = async () => {
+    if (!firstName || !lastName || !phoneNumber || !password || !confirmPassword) {
+      Toast.show({
+        type: ALERT_TYPE.WARNING,
+        title: 'ملاحظة',
+        textBody: 'تأكد من ملئ الحقول!',
+      });
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      Toast.show({
+        type: ALERT_TYPE.WARNING,
+        title: 'ملاحظة',
+        textBody: 'كلمة المرور غير متطابقة!',
+      });
+      return;
+    }
+
+    if (!agreeToTerms) {
+      Toast.show({
+        type: ALERT_TYPE.WARNING,
+        title: 'ملاحظة',
+        textBody: 'يجب الموافقة على الشروط والخصوصية!',
+      });
+      return;
+    }
+
+    await signUp(phoneNumber, firstName, lastName, password, expoToken);
   };
 
+  const isLoading = isLogin ? isLoginLoading : isSignupLoading;
 
   return (
     <KeyboardAvoidingView 
@@ -137,7 +184,7 @@ export default function DriverLoginScreen() {
             <Text style={styles.label}>رقم الهاتف</Text>
             <TextInput
               style={styles.input}
-              placeholder="+218-920000000"
+              placeholder="09XXXXXXXX"
               placeholderTextColor="#B7B7B7"
               value={phoneNumber}
               onChangeText={setPhoneNumber}
@@ -146,25 +193,6 @@ export default function DriverLoginScreen() {
             />
           </View>
 
-          {!isLogin && (
-            <>
-              {/* Birth Date */}
-              <View style={styles.inputContainer}>
-                <Text style={styles.label}>تاريخ الميلاد</Text>
-                <View style={styles.dateInputContainer}>
-                  <Ionicons name="calendar-outline" size={24} color="#B7B7B7" style={styles.dateIcon} />
-                  <TextInput
-                    style={styles.input}
-                    placeholder="27/07/1998"
-                    placeholderTextColor="#B7B7B7"
-                    value={birthDate}
-                    onChangeText={setBirthDate}
-                    textAlign="right"
-                  />
-                </View>
-              </View>
-            </>
-          )}
 
           {/* Password */}
           <View style={styles.inputContainer}>
@@ -244,7 +272,7 @@ export default function DriverLoginScreen() {
                 </View>
                 <Text style={styles.checkboxText}>تذكرني</Text>
               </TouchableOpacity>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={() => router.push('/(driver)/resetPassword')}>
                 <Text style={styles.forgotPassword}>نسيت كلمة المرور؟</Text>
               </TouchableOpacity>
             </View>
@@ -252,12 +280,17 @@ export default function DriverLoginScreen() {
 
           {/* Submit Button */}
           <TouchableOpacity 
-            style={styles.submitButton}
+            style={[styles.submitButton, isLoading && styles.submitButtonDisabled]}
             onPress={isLogin ? handleLogin : handleSignup}
+            disabled={isLoading}
           >
-            <Text style={styles.submitButtonText}>
-              {isLogin ? 'تسجيل الدخول' : 'إنشاء حساب'}
-            </Text>
+            {isLoading ? (
+              <ActivityIndicator color="#fff" />
+            ) : (
+              <Text style={styles.submitButtonText}>
+                {isLogin ? 'تسجيل الدخول' : 'إنشاء حساب'}
+              </Text>
+            )}
           </TouchableOpacity>
         </View>
       </ScrollView>

@@ -41,7 +41,13 @@ export const Settings = () => {
         durationInDays: '',
         isThereDiscount: false,
         priceAfterDiscount: '',
-        packageImage: ''
+        packageImage: '',
+        description: '',
+        badgeLabel: '',
+        statusText: '',
+        statusTone: 'info',
+        ctaText: 'اشتراك الان',
+        isActive: true
     });
     const [packageImageFile, setPackageImageFile] = useState([]);
 
@@ -72,7 +78,13 @@ export const Settings = () => {
             durationInDays: '',
             isThereDiscount: false,
             priceAfterDiscount: '',
-            packageImage: ''
+            packageImage: '',
+            description: '',
+            badgeLabel: '',
+            statusText: '',
+            statusTone: 'info',
+            ctaText: 'اشتراك الان',
+            isActive: true
         });
         setPackageImageFile([]);
     };
@@ -139,7 +151,13 @@ export const Settings = () => {
             durationInDays: pkg.durationInDays,
             isThereDiscount: pkg.isThereDiscount,
             priceAfterDiscount: pkg.priceAfterDiscount || '',
-            packageImage: pkg.packageImage
+            packageImage: pkg.packageImage,
+            description: Array.isArray(pkg.description) ? pkg.description.join('\n') : '',
+            badgeLabel: pkg.badgeLabel || '',
+            statusText: pkg.statusText || '',
+            statusTone: pkg.statusTone || 'info',
+            ctaText: pkg.ctaText || 'اشتراك الان',
+            isActive: pkg.isActive !== undefined ? pkg.isActive : true
         });
         openModal('packages');
     };
@@ -171,7 +189,13 @@ export const Settings = () => {
                 durationInDays: parseInt(packageForm.durationInDays),
                 isThereDiscount: packageForm.isThereDiscount,
                 priceAfterDiscount: packageForm.isThereDiscount ? parseFloat(packageForm.priceAfterDiscount) : undefined,
-                packageImage: imageToSave
+                packageImage: imageToSave,
+                description: (packageForm.description || '').split('\n').map(t => t.trim()).filter(Boolean),
+                badgeLabel: packageForm.badgeLabel || undefined,
+                statusText: packageForm.statusText || undefined,
+                statusTone: packageForm.statusTone || undefined,
+                ctaText: packageForm.ctaText || undefined,
+                isActive: packageForm.isActive
             };
 
             if (packageForm._id) {
@@ -414,6 +438,58 @@ export const Settings = () => {
                                     />
                                 </div>
                             </div>
+                            <div className="input-group">
+                                <label>وصف الباقة (سطر لكل نقطة)</label>
+                                <textarea
+                                    value={packageForm.description}
+                                    onChange={(e) => setPackageForm({ ...packageForm, description: e.target.value })}
+                                    rows={3}
+                                    placeholder="أدخل وصف الباقة"
+                                />
+                            </div>
+                            <div className="input-row">
+                                <div className="input-group">
+                                    <label>عنوان الشارة (اختياري)</label>
+                                    <input
+                                        type="text"
+                                        value={packageForm.badgeLabel}
+                                        onChange={(e) => setPackageForm({ ...packageForm, badgeLabel: e.target.value })}
+                                        placeholder="مثال: 3"
+                                    />
+                                </div>
+                                <div className="input-group">
+                                    <label>نص الحالة</label>
+                                    <input
+                                        type="text"
+                                        value={packageForm.statusText}
+                                        onChange={(e) => setPackageForm({ ...packageForm, statusText: e.target.value })}
+                                        placeholder="مثال: متاح"
+                                    />
+                                </div>
+                            </div>
+                            <div className="input-row">
+                                <div className="input-group">
+                                    <label>درجة الحالة</label>
+                                    <select
+                                        value={packageForm.statusTone}
+                                        onChange={(e) => setPackageForm({ ...packageForm, statusTone: e.target.value })}
+                                    >
+                                        <option value="info">اعتيادي</option>
+                                        <option value="success">نجاح</option>
+                                        <option value="warning">تحذير</option>
+                                        <option value="danger">خطر</option>
+                                    </select>
+                                </div>
+                                <div className="input-group">
+                                    <label>نص الزر</label>
+                                    <input
+                                        type="text"
+                                        value={packageForm.ctaText}
+                                        onChange={(e) => setPackageForm({ ...packageForm, ctaText: e.target.value })}
+                                        placeholder="مثال: اشتراك الان"
+                                    />
+                                </div>
+                            </div>
                             <div className="input-group checkbox-group">
                                 <label>
                                     <input
@@ -422,6 +498,16 @@ export const Settings = () => {
                                         onChange={(e) => setPackageForm({ ...packageForm, isThereDiscount: e.target.checked })}
                                     />
                                     يوجد خصم
+                                </label>
+                            </div>
+                            <div className="input-group checkbox-group">
+                                <label>
+                                    <input
+                                        type="checkbox"
+                                        checked={packageForm.isActive}
+                                        onChange={(e) => setPackageForm({ ...packageForm, isActive: e.target.checked })}
+                                    />
+                                    الباقة فعّالة
                                 </label>
                             </div>
                             {packageForm.isThereDiscount && (
@@ -483,7 +569,17 @@ export const Settings = () => {
                                             )}
                                             {' - '}
                                             {pkg.durationInDays} يوم
+                                            {pkg.statusText ? ` - ${pkg.statusText}` : ''}
+                                            {pkg.isActive === false ? ' (غير فعّالة)' : ''}
                                         </p>
+                                        {pkg.badgeLabel ? <p>شارة: {pkg.badgeLabel}</p> : null}
+                                        {Array.isArray(pkg.description) && pkg.description.length > 0 && (
+                                            <ul className="package-desc-list">
+                                                {pkg.description.map((line, idx) => (
+                                                    <li key={idx}>{line}</li>
+                                                ))}
+                                            </ul>
+                                        )}
                                     </div>
                                     <div className="package-actions">
                                         <button className="edit-btn" onClick={() => handleEditPackage(pkg)}>

@@ -103,8 +103,8 @@ const sendResetMessage = async (req,res) => {
 
 const resendMessage = async (req,res) => {
     const { phoneNumber } = req.body
-    const resendOtpCode = await userModel.getResetOtpCode(phoneNumber);
     try {
+        const resendOtpCode = await userModel.getResetOtpCode(phoneNumber);
         const otpMessage = `رمز التحقق الخاص بك في جاهز هو: ${resendOtpCode}`;
         await sendMessage(otpMessage, phoneNumber);
         res.status(200).json({message:'تم إعادة إرسال رمز التحقق إلى رقم هاتفك'});
@@ -116,8 +116,8 @@ const resendMessage = async (req,res) => {
 const checkResetCode = async (req,res) => {
     const { phoneNumber,OTPCode } = req.body
     try {
-        const user = await userModel.checkResetCode(phoneNumber,OTPCode);
-        res.status(200).json({valid:user});
+        const valid = await userModel.checkResetCode(phoneNumber,OTPCode);
+        res.status(200).json({valid});
     }catch(err){
         res.status(400).json({message:err.message});
     }

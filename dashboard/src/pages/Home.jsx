@@ -160,10 +160,11 @@ export const Home = () => {
 
     return (
         <section className='container home'>
-            <div className="home-header">
+            {/* <div style={{marginBottom: 10, fontWeight: 'bold', fontSize: 20}}>hello there</div> */}
+            {/* <div className="home-header">
                 <h1 className="TXT-heading color-normal">لوحة التحكم</h1>
                 <p className="TXT-normal color-light">مرحباً بك، {user?.username}</p>
-            </div>
+            </div> */}
 
             <div className="dashboard-grid">
                 {visibleCards.map(card => (

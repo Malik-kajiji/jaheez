@@ -23,6 +23,9 @@ export default function RootLayout() {
             <Stack.Screen name="profile"
                 options={MAIN_SCREEN_OPTIONS(router,"حسابي")}
             />
+            <Stack.Screen name="subscriptionManagement"
+                options={MAIN_SCREEN_OPTIONS(router,"إدارة الاشتراك")}
+            />
             <Stack.Screen name="report"
                 options={MAIN_SCREEN_OPTIONS(router,"إرسال بلاغ")}
             />

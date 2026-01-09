@@ -142,7 +142,20 @@ const getAllPackages = async (req, res) => {
 // Create package
 const createPackage = async (req, res) => {
     try {
-        const { name, price, durationInDays, isThereDiscount, priceAfterDiscount, packageImage } = req.body;
+        const {
+            name,
+            price,
+            durationInDays,
+            isThereDiscount,
+            priceAfterDiscount,
+            packageImage,
+            description,
+            badgeLabel,
+            statusText,
+            statusTone,
+            ctaText,
+            isActive
+        } = req.body;
         
         if (!name || !price || !durationInDays || !packageImage) {
             throw Error('جميع الحقول المطلوبة يجب ملؤها');
@@ -155,6 +168,10 @@ const createPackage = async (req, res) => {
         if (isThereDiscount && (!priceAfterDiscount || priceAfterDiscount >= price)) {
             throw Error('السعر بعد الخصم يجب أن يكون أقل من السعر الأصلي');
         }
+
+        if (description && !Array.isArray(description)) {
+            throw Error('الوصف يجب أن يكون قائمة نصوص');
+        }
         
         // Upload image to AWS if it's base64
         let imageUrl = packageImage;
@@ -162,16 +179,22 @@ const createPackage = async (req, res) => {
             imageUrl = await saveImageToAWS(packageImage);
         }
         
-        const package = await Package.create({
+        const pkg = await Package.create({
             name,
             price,
             durationInDays,
+            description: description || [],
+            badgeLabel,
+            statusText,
+            statusTone,
+            ctaText,
+            isActive: isActive !== undefined ? isActive : true,
             isThereDiscount: isThereDiscount || false,
             priceAfterDiscount,
             packageImage: imageUrl
         });
         
-        res.status(201).json(package);
+        res.status(201).json(pkg);
     } catch (error) {
         res.status(400).json({ error: error.message });
     }
@@ -181,7 +204,20 @@ const createPackage = async (req, res) => {
 const updatePackage = async (req, res) => {
     try {
         const { id } = req.params;
-        const { name, price, durationInDays, isThereDiscount, priceAfterDiscount, packageImage } = req.body;
+        const {
+            name,
+            price,
+            durationInDays,
+            isThereDiscount,
+            priceAfterDiscount,
+            packageImage,
+            description,
+            badgeLabel,
+            statusText,
+            statusTone,
+            ctaText,
+            isActive
+        } = req.body;
         
         const package = await Package.findById(id);
         if (!package) {
@@ -199,10 +235,20 @@ const updatePackage = async (req, res) => {
         if (isThereDiscount && priceAfterDiscount && priceAfterDiscount >= (price || package.price)) {
             throw Error('السعر بعد الخصم يجب أن يكون أقل من السعر الأصلي');
         }
+
+        if (description !== undefined && !Array.isArray(description)) {
+            throw Error('الوصف يجب أن يكون قائمة نصوص');
+        }
         
         if (name) package.name = name;
         if (price) package.price = price;
         if (durationInDays) package.durationInDays = durationInDays;
+        if (description !== undefined) package.description = description;
+        if (badgeLabel !== undefined) package.badgeLabel = badgeLabel;
+        if (statusText !== undefined) package.statusText = statusText;
+        if (statusTone !== undefined) package.statusTone = statusTone;
+        if (ctaText !== undefined) package.ctaText = ctaText;
+        if (isActive !== undefined) package.isActive = isActive;
         if (isThereDiscount !== undefined) package.isThereDiscount = isThereDiscount;
         if (priceAfterDiscount) package.priceAfterDiscount = priceAfterDiscount;
         

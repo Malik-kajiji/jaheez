@@ -158,10 +158,12 @@
                 }
 
                 input[type="text"],
-                input[type="number"] {
+                input[type="number"],
+                select,
+                textarea {
                     width: 100%;
-                    height: 48px;
-                    padding: 0 1rem;
+                    min-height: 48px;
+                    padding: 0.75rem 1rem;
                     border: 2px solid var(--borders-color);
                     border-radius: 8px;
                     background-color: var(--bg-color);
@@ -178,6 +180,11 @@
                     &::placeholder {
                         color: var(--light-text-color);
                     }
+                }
+
+                textarea {
+                    resize: vertical;
+                    min-height: 90px;
                 }
 
                 &.checkbox-group {
@@ -413,6 +420,17 @@
                                 color: var(--primary-color);
                                 font-weight: 600;
                                 margin-left: 0.5rem;
+                            }
+                        }
+
+                        .package-desc-list {
+                            margin: 0.4rem 0 0;
+                            padding-left: 1.2rem;
+                            color: var(--light-text-color);
+                            line-height: 1.4;
+
+                            li {
+                                margin-bottom: 0.2rem;
                             }
                         }
                     }

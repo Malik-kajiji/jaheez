@@ -13,6 +13,7 @@ const COLORS = {
     LightTextColor:'#6C7278',
     ExtraLightTextColor:'#B7B7B7',
     whiteTextColor:'#FFFFFF',
+    LightGrayColor:'#F2F2F2',
 
     bgColor:'#FDFDFD',
     iconsColor:'#04070E',
@@ -79,91 +80,51 @@ const MAIN_SCREEN_OPTIONS = (router,renderText) => ({
     headerShadowVisible: true,
 })
 
-// const MAIN_HOME_TAB_OPTIONS = (router) => ({
-//     header: (props) => {
-//         return (
-//             <View style={{ backgroundColor: COLORS.bgColor, height: 120 }}>
-//                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20,height: 120,paddingTop:35 }}>
-//                     <TouchableOpacity onPress={() => router.push('/')} style={{}}>
-//                         <Image
-//                             source={require('../images/dark-logo.png')}
-//                             style={{ width: 50, height: 50, borderRadius: 25 }}
-//                         />
-//                     </TouchableOpacity>
-//                     <View>
-//                         <Text style={{ fontSize: SIZES.large, fontFamily: FONT.CrExtraBold,color:COLORS.DarkTextColor, textAlign: 'right' }}>
-//                             مرحبا بك في مود
-//                         </Text>
-//                         <Text style={{ fontSize: SIZES.medium,color:COLORS.LightTextColor2, fontFamily: FONT.CrRegular, textAlign: 'right' }}>
-//                             إختــــار بمزاجــــــــــك
-//                         </Text>
-//                     </View>
-//                     <TouchableOpacity onPress={() => router.push('/cart')} style={{ backgroundColor: '#F5F6FA', width: 50, height: 50, borderRadius: 25, alignItems: 'center', justifyContent: 'center' }}>
-//                         <Ionicons name="bag-handle-outline" size={28} color="black" />
-//                     </TouchableOpacity>
-//                 </View>
-//             </View>
-//         );
-//     },
-//     headerShadowVisible: true,
-// });
+const DRIVER_MAIN_SCREEN_OPTIONS = (router,renderText) => ({
+    header: (props) => {
+        const navigateFromHeader = (targetName) => {
+            const currentName = props?.route?.name;
+            const homeName = 'home';
+            const targetPath = `/(driver)/${targetName}`;
 
-// const MAIN_WEBSITE_TAB_OPTIONS = (router) => ({
-//     header: (props) => {
-//         return (
-//             <View style={{ backgroundColor: COLORS.bgColor, height: 120 }}>
-//                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20,height: 120,paddingTop:35 }}>
-//                     <TouchableOpacity onPress={() => router.back()} style={{ backgroundColor: '#F5F6FA', width: 50, height: 50, borderRadius: 25, alignItems: 'center', justifyContent: 'center' }}>
-//                         <AntDesign name="arrowleft" size={28} color="black" />
-//                     </TouchableOpacity>
-//                     <View>
-//                         <Text style={{ fontSize: SIZES.large, fontFamily: FONT.CrExtraBold,color:COLORS.DarkTextColor, textAlign: 'right' }}>
-//                             مرحبا بك في مود
-//                         </Text>
-//                         <Text style={{ fontSize: SIZES.medium,color:COLORS.LightTextColor2, fontFamily: FONT.CrRegular, textAlign: 'right' }}>
-//                             إختــــار بمزاجــــــــــك
-//                         </Text>
-//                     </View>
-//                     <TouchableOpacity onPress={() => router.push('/cart')} style={{ backgroundColor: '#F5F6FA', width: 50, height: 50, borderRadius: 25, alignItems: 'center', justifyContent: 'center' }}>
-//                         <Ionicons name="bag-handle-outline" size={28} color="black" />
-//                     </TouchableOpacity>
-//                 </View>
-//             </View>
-//         );
-//     },
-//     headerShadowVisible: true,
-// });
+            if (currentName === targetName) return;
+
+            if (targetName === homeName) {
+                router.back();
+                return;
+            }
+
+            if (currentName === homeName) {
+                router.push(targetPath);
+            } else {
+                router.replace(targetPath);
+            }
+        };
+        return (
+            <View style={{ backgroundColor: COLORS.bgColor, height: 120 }}>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20,height: 120,paddingTop:35 }}>
+                    <TouchableOpacity onPress={() => DeviceEventEmitter.emit('driverMenu:toggle')} style={{ width: 50, height: 50, borderRadius: 25, alignItems: 'center', justifyContent: 'center' }}>
+                        <AntDesign name="menu" size={32} color="black" />
+                    </TouchableOpacity>
+                    <View>
+                        <Text style={{ fontSize: SIZES.large, fontFamily: FONT.GE_SS_Light1,color:COLORS.DarkTextColor, textAlign: 'right' }}>
+                            {renderText}
+                        </Text>
+                    </View>
+                    <TouchableOpacity onPress={() => { DeviceEventEmitter.emit('driverMenu:close'); navigateFromHeader('profile'); }} style={{}}>
+                        <Image
+                            source={require('../assets/images/driver.png')}
+                            style={{ width: 50, height: 50, borderRadius: 25 }}
+                        />
+                    </TouchableOpacity>
+                </View>
+            </View>
+        );
+    },
+    headerShadowVisible: true,
+})
 
 
-//     const NON_LOGGED_HEADER = (router) => ({
-//         header: (props) => (<View style={{ backgroundColor: 'trasnparent', height: 120 }}>
-//                     <View style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', paddingTop:30, paddingHorizontal: 20,height: 120 }}>
-//                         <TouchableOpacity onPress={() => router.back()} style={{ backgroundColor: '#F5F6FA', width: 50, height: 50, borderRadius: 25, alignItems: 'center', justifyContent: 'center' }}>
-//                             <AntDesign name="arrowleft" size={28} color="black" />
-//                         </TouchableOpacity>
-//                     </View>
-//                 </View>),
-//         headerShadowVisible: true,
-//     })
-
-//     const MY_ACCOUNT_HEADER_OPTIONS = (router,user) => ({
-//         header: (props) => (<View style={{ backgroundColor: 'trasnparent', height: 120 }}>
-//                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingTop:30, paddingHorizontal: 20,height: 120 }}>
-//                         <TouchableOpacity onPress={() => router.back()} style={{ backgroundColor: '#F5F6FA', width: 50, height: 50, borderRadius: 25, alignItems: 'center', justifyContent: 'center' }}>
-//                             <AntDesign name="arrowleft" size={28} color="black" />
-//                         </TouchableOpacity>
-//                         <View style={{alignItems:'center',justifyContent:'center'}}>
-//                             <Text style={{color:COLORS.NormalTextColor,fontFamily:FONT.CrBold,fontSize:SIZES.large}}>
-//                                 حسابي
-//                             </Text>
-//                         </View>
-//                         <TouchableOpacity onPress={() => router.push('/cart')} style={{ backgroundColor: '#F5F6FA', width: 50, height: 50, borderRadius: 25, alignItems: 'center', justifyContent: 'center' }}>
-//                             <Ionicons name="bag-handle-outline" size={28} color="black" />
-//                         </TouchableOpacity>
-//                     </View>
-//                 </View>),
-//         headerShadowVisible: true,
-//     })
 
 
 
@@ -171,8 +132,5 @@ const MAIN_SCREEN_OPTIONS = (router,renderText) => ({
 export {
     COLORS,FONT,SIZES,DIMENSIONS,
     MAIN_SCREEN_OPTIONS,
-    // MAIN_HOME_TAB_OPTIONS,
-    // NON_LOGGED_HEADER,
-    // MY_ACCOUNT_HEADER_OPTIONS,
-    // MAIN_WEBSITE_TAB_OPTIONS,
+    DRIVER_MAIN_SCREEN_OPTIONS
 }

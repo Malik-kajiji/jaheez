@@ -58,6 +58,16 @@ const userRoutes = require('./routes/userRoutes/userRoutes')
 // user end points
 app.use('/api/user',userRoutes)
 
+// driver routes
+const driverRoutes = require('./routes/driverRoutes/driverRoutes')
+const tripsRoutes = require('./routes/driverRoutes/tripsRoutes')
+const driverSubscriptionRoutes = require('./routes/driverRoutes/subscriptionRoutes')
+
+// driver end points
+app.use('/api/driver',driverRoutes)
+app.use('/api/driver/trips',tripsRoutes)
+app.use('/api/driver/subscription',driverSubscriptionRoutes)
+
 
 mongoose.connect(process.env.MONGODB_URL)
 .then(()=>{
